@@ -1,7 +1,7 @@
 from flask import Flask, Session, g
 
 
-blueprints = ['index', 'signup', 'signin', 'signout', 'resetpasswd', 'domain']
+blueprints = ['index', 'account', 'domain']
 
 
 def create_app():

@@ -16,5 +16,8 @@ Thumbs.db
 
 # python generated files
 *.pyc
+build
+dist
+*.egg-info
 
 ## generic files to ignore

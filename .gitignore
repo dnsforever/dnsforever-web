@@ -1,0 +1,20 @@
+database.db
+
+# vim generated files
+*.swp
+*.*~
+
+# OS generated files
+*.DS_Store
+*.DS_Store?
+*._*
+*.Spotlight-V100
+*.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# python generated files
+*.pyc
+
+## generic files to ignore

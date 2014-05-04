@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+    <!--[if lt IE 9]>
+        <script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    {%- block head -%}
+    {%- endblock -%}
+  </head>
+  <body>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">YJ DNS</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="{{ url_for('domain.index') }}">Dashboard</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain List <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                {% if g.domain_list == [] %}
+                <li><a href="{{ url_for('domain.new') }}">There is no domain, please add your domain.</a></li>
+                {% endif %}
+                {% for domain in g.domain_list %}
+                <li><a href="{{ url_for('domain.detail', domain=domain) }}">{{ domain }}</a></li>
+                {% endfor %}
+              </ul>
+            </li>
+          </ul>
+          <a href="{{ url_for('domain.new')}}" class="btn btn-default navbar-btn navbar-left" role="button"><span class="glyphicon glyphicon-plus"></span> Add domain</a>
+          <form class="navbar-form navbar-right" action="{{ url_for('signin.index') }}" method="post">
+            <div class="form-group">
+              <input name="email" type="text" placeholder="Email" class="form-control">
+              <input name="password" type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            or
+            <a href="{{ url_for('signup.index')}}" class="btn btn-info" role="button">Signup</a>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        {%- block body -%}
+        {%- endblock -%}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/jquery-2.1.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  </body>
+</html>

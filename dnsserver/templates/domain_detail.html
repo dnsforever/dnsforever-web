@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}
+YJ DNS - Domain [{{ domain_name }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Domain Setting <small>{{ domain_name }}</small></h1>
+
+<h2>A Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ domain_name }}</td>
+            <th>127.0.0.1</th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>
+
+<h2>AAAA Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ domain_name }}</td>
+            <th>127.0.0.1</th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>
+
+<h2>CNAME Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ domain_name }}</td>
+            <th>127.0.0.1</th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>
+
+<h2>MX Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ domain_name }}</td>
+            <th>127.0.0.1</th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>
+
+<h2>TXT Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ domain_name }}</td>
+            <th>127.0.0.1</th>
+            <th></th>
+        </tr>
+    </tbody>
+</table>
+<div class="pull-right">
+    <button type="submit" class="btn btn-primary">New</button>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</div>
+{% endblock %}
+

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}
+YJ DNS - Domain List
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Domain List</h1>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Domain</th>
+            <th>Status</th>
+            <th width="80">A(DDNS)</th>
+            <th width="80">AAAA</th>
+            <th width="80">CNAME</th>
+            <th width="80">MX</th>
+            <th width="80">TXT</th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for domain in domain_list %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td><a href="{{ url_for('domain.detail', domain=domain) }}">{{ domain }}</a></td>
+            <th>Good</th>
+            <th>1(1)</th>
+            <th>1</th>
+            <th>1</th>
+            <th>1</th>
+            <th>1</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pull-right">
+    <a href="{{ url_for('domain.new') }}" class="btn btn-primary">New</a>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</div>
+{% endblock %}
+

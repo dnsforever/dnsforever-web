@@ -1,9 +1,9 @@
 from flask import Blueprint, g, render_template, redirect, url_for, request
 from wtforms import Form, TextField, PasswordField, validators, ValidationError
-from dnsserver.tools.session import login
 from hashlib import sha256
 
 from dnsserver.models import User
+from dnsserver.tools.session import login, set_user
 
 app = Blueprint('account', __name__)
 
@@ -48,19 +48,44 @@ def signup_process():
     return redirect(url_for('account.signin'))
 
 
-@app.route('/signin', methods=['GET', 'POST'])
+class SigninForm(Form):
+    email = TextField('email', [validators.Length(min=6, max=127),
+                                validators.Email()])
+    password = PasswordField('password', [validators.Required()])
+
+    def validate_email(form, field):
+        user = g.session.query(User).filter(User.email == field.data).first()
+        if user is None or user.password != password_hash(form.password.data):
+            raise ValidationError('Email or Password is wrong.')
+
+
+@app.route('/signin', methods=['GET'])
 @login(False, '/')
 def signin():
-    return render_template('signin.html')
+    return render_template('signin.html', form=SigninForm())
+
+
+@app.route('/signin', methods=['POST'])
+@login(False, '/')
+def signin_process():
+    form = SigninForm(request.form)
+
+    if not form.validate():
+        return render_template('signin.html', form=form)
+
+    user = g.session.query(User).filter(User.email == form.email.data).first()
+    set_user(user)
+
+    return redirect(url_for('index.index'))
 
 
 @app.route('/signout', methods=['GET', 'POST'])
-@login(False, '/')
+@login(True, '/')
 def signout():
     return redirect(url_for('index.index'))
 
 
 @app.route('/resetpasswd', methods=['GET', 'POST'])
-@login(False, '/')
+@login(True, '/')
 def resetpasswd():
     return render_template('resetpasswd.html')

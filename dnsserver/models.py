@@ -76,7 +76,7 @@ class RecordDDNS(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(User, backref='ddns')
+    domain = relationship(Domain, backref='ddns')
 
     name = Column(String(256), nullable=True)
     ip = Column(String(16), nullable=False)
@@ -90,7 +90,7 @@ class RecordA(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(User, backref='a')
+    domain = relationship(Domain, backref='a')
 
     name = Column(String(256), nullable=True)
     ip = Column(String(16), nullable=False)
@@ -104,7 +104,7 @@ class RecordAAAA(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(User, backref='aaaa')
+    domain = relationship(Domain, backref='aaaa')
 
     name = Column(String(256), nullable=True)
     ip = Column(String(40), nullable=False)
@@ -118,7 +118,7 @@ class RecordCNAME(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(User, backref='cname')
+    domain = relationship(Domain, backref='cname')
 
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
@@ -132,7 +132,7 @@ class RecordMX(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(User, backref='mx')
+    domain = relationship(Domain, backref='mx')
 
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
@@ -146,7 +146,7 @@ class RecordTXT(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(User, backref='txt')
+    domain = relationship(Domain, backref='txt')
 
     name = Column(String(256), nullable=True)
     text = Column(String(256), nullable=False)

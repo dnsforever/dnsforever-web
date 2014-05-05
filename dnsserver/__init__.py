@@ -1,4 +1,5 @@
-from flask import Flask, Session, g
+from flask import Flask, g
+from dnsserver.models import Session
 
 
 blueprints = ['index', 'account', 'domain']

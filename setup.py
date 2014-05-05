@@ -8,6 +8,7 @@ setup(
     zip_safe=False,
     install_requires=['Flask>=0.10.1',
                       'Flask-Script>=2.0.3',
+                      'Flask-WTF>=0.9.5',
                       'Werkzeug>=0.7',
                       'Jinja2>=2.4',
                       'SQLAlchemy>=0.9.4']

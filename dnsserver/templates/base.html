@@ -42,6 +42,12 @@
             </li>
           </ul>
           <a href="{{ url_for('domain.new')}}" class="btn btn-default navbar-btn navbar-left" role="button"><span class="glyphicon glyphicon-plus"></span> Add domain</a>
+          {% if g.user %}
+          <div class="navbar-right">
+          <p class="navbar-text">Welcome {{ g.user.name }}</p>
+          <a href="{{ url_for('account.signout')}}" class="btn btn-primary navbar-btn" role="button">Signout</a>
+          </div>
+          {% else %}
           <form class="navbar-form navbar-right" action="{{ url_for('account.signin') }}" method="post">
             <div class="form-group">
               <input name="email" type="text" placeholder="Email" class="form-control">
@@ -51,6 +57,7 @@
             or
             <a href="{{ url_for('account.signup')}}" class="btn btn-info" role="button">Signup</a>
           </form>
+          {% endif %}
         </div>
       </div>
     </div>

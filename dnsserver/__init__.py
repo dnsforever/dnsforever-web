@@ -1,5 +1,7 @@
 from flask import Flask, g
+
 from dnsserver.models import Session
+from dnsserver.tools.session import get_user
 
 
 blueprints = ['index', 'account', 'domain']
@@ -17,6 +19,7 @@ def create_app():
         g.session = Session()
 
         # TODO: load user info
+        g.user = get_user()
         # TODO: load domain list
         g.domain_list = ['example.com', 'domain.org', 'domainserver.kr']
 

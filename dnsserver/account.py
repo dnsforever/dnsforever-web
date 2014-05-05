@@ -82,6 +82,7 @@ def signin_process():
 @app.route('/signout', methods=['GET', 'POST'])
 @login(True, '/')
 def signout():
+    set_user(None)
     return redirect(url_for('index.index'))
 
 

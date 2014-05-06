@@ -17,6 +17,28 @@ YJ DNS - New Domain
       <textarea class="form-control" rows="3" id="inputDomain" name="domain" placeholder="example.com"></textarea>
     </div>
   </div>
+  {% if error_domains %}
+  {% if domains != error_domains %}
+  <div class="col-md-10 col-md-offset-2 alert alert-success">
+    <p>Registered successfully.</p>
+    <ul>
+      {% for domain in domains %}
+      {% if domain not in domains%}
+      <li>{{ domain }}</li>
+      {% endif %}
+      {% endfor %}
+    <ul>
+  </div>
+  {% endif %}
+  <div class="col-md-10 col-md-offset-2 alert alert-danger">
+    <p>Some error has occurred.</p>
+    <ul>
+      {% for domain in error_domains %}
+      <li>{{ domain }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
   <div class="form-group pull-right">
     <button type="submit" class="btn btn-primary">Add</button>
     <!-- <button type="reset" class="btn btn-danger">Reset</button> -->

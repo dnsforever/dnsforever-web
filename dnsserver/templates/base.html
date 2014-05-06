@@ -33,7 +33,7 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain List <b class="caret"></b></a>
               <ul class="dropdown-menu">
                 {% if g.domain_list == [] %}
-                <li><a href="{{ url_for('domain.new') }}">There is no domain, please add your domain.</a></li>
+                <li><a href="{{ url_for('domain.new') }}">There are no domains, please add your domain.</a></li>
                 {% endif %}
                 {% for domain in g.domain_list %}
                 <li><a href="{{ url_for('domain.detail', domain=domain) }}">{{ domain }}</a></li>
@@ -44,7 +44,7 @@
           <a href="{{ url_for('domain.new')}}" class="btn btn-default navbar-btn navbar-left" role="button"><span class="glyphicon glyphicon-plus"></span> Add domain</a>
           {% if g.user %}
           <div class="navbar-right">
-          <p class="navbar-text">Welcome {{ g.user.name }}</p>
+              <p class="navbar-text">Welcome <a href="{{ url_for('account.resetpasswd') }}">{{ g.user.name }}</a></p>
           <a href="{{ url_for('account.signout')}}" class="btn btn-primary navbar-btn" role="button">Signout</a>
           </div>
           {% else %}

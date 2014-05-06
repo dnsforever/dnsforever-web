@@ -28,9 +28,9 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
 
-    name = Column(Unicode(100), nullable=False, index=True)
+    name = Column(Unicode(100), nullable=False)
 
-    email = Column(Unicode(100), nullable=True, index=True, unique=True)
+    email = Column(Unicode(100), nullable=False, index=True, unique=True)
     email_validate = Column(Boolean, nullable=False, default=False)
     password = Column(Unicode(100), nullable=True)
 
@@ -57,9 +57,11 @@ class User(Base):
 class Domain(Base):
     __tablename__ = 'domain'
 
+    DOMAIN_PATTERN = re.compile('^([a-z0-9\-]+\.)+([a-z0-9\-]+)$')
+
     id = Column(Integer, primary_key=True)
 
-    domain = Column(String(256), nullable=False)
+    domain = Column(String(256), nullable=False, index=True, unique=True)
 
     owner_id = Column(Integer, ForeignKey('user.id'), nullable=False,
                       index=True)
@@ -67,6 +69,14 @@ class Domain(Base):
 
     created_at = Column(DateTime(timezone=True), nullable=False,
                         default=functions.now())
+
+    @validates('domain')
+    def email_validates(self, key, domain):
+        if not isinstance(domain, str):
+            raise ValueError
+        if not self.DOMAIN_PATTERN.match(domain):
+            raise ValueError
+        return domain
 
 
 class RecordDDNS(Base):

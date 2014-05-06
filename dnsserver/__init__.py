@@ -21,7 +21,10 @@ def create_app():
         # TODO: load user info
         g.user = get_user()
         # TODO: load domain list
-        g.domain_list = ['example.com', 'domain.org', 'domainserver.kr']
+        if g.user:
+            g.domain_list = [domain.domain for domain in g.user.domain]
+        else:
+            g.domain_list = []
 
     return app
 

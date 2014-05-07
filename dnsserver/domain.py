@@ -194,3 +194,26 @@ def record_a_edit_process(domain, record_id):
         g.session.add(record)
 
     return redirect(url_for('domain.record_a', domain=domain.domain))
+
+
+@app.route('/<string:domain>/a/<int:record_id>/del', methods=['GET', 'POST'])
+@login(True, '/')
+def record_a_delete(domain, record_id):
+    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
+                                    .filter(Domain.owner == get_user())\
+                                    .first()
+    if not domain:
+        return redirect(url_for('domain.index'))
+
+    record = g.session.query(RecordA).filter(RecordA.id == record_id)\
+                                     .filter(RecordA.domain == domain)\
+                                     .first()
+    if not record:
+        return redirect(url_for('domain.record_a', domain=domain.domain))
+
+    if request.method == 'POST':
+        with g.session.begin():
+            g.session.delete(record)
+        return redirect(url_for('domain.record_a', domain=domain.domain))
+
+    return render_template('domain_a_del.html', domain=domain, record=record)

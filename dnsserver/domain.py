@@ -104,9 +104,34 @@ def record_a_new(domain):
     if not domain:
         return redirect(url_for('domain.index'))
 
+    form = RecordAForm(ip=request.remote_addr)
+
     return render_template('domain_a_new.html',
                            domain=domain,
-                           form=RecordAForm(ip=request.remote_addr))
+                           form=form)
+
+
+@app.route('/<string:domain>/a/<int:record_id>', methods=['GET'])
+@login(True, '/')
+def record_a_edit(domain, record_id):
+    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
+                                    .filter(Domain.owner == get_user())\
+                                    .first()
+    if not domain:
+        return redirect(url_for('domain.index'))
+
+    record = g.session.query(RecordA).filter(RecordA.id == record_id)\
+                                     .filter(RecordA.domain == domain)\
+                                     .first()
+    if not record:
+        return redirect(url_for('domain.record_a', domain=domain.domain))
+
+    form = RecordAForm(name=record.name, ip=record.ip, memo=record.memo,
+                       ddns=record.ddns)
+
+    return render_template('domain_a_edit.html',
+                           domain=domain,
+                           form=form)
 
 
 @app.route('/<string:domain>/a/new', methods=['POST'])
@@ -133,5 +158,39 @@ def record_a_new_process(domain):
 
     with g.session.begin():
         g.session.add(a_record)
+
+    return redirect(url_for('domain.record_a', domain=domain.domain))
+
+
+@app.route('/<string:domain>/a/<int:record_id>', methods=['POST'])
+@login(True, '/')
+def record_a_edit_process(domain, record_id):
+    form = RecordAForm(request.form)
+    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
+                                    .filter(Domain.owner == get_user())\
+                                    .first()
+    if not domain:
+        return redirect(url_for('domain.index'))
+
+    record = g.session.query(RecordA).filter(RecordA.id == record_id)\
+                                     .filter(RecordA.domain == domain)\
+                                     .first()
+    if not record:
+        return redirect(url_for('domain.record_a', domain=domain.domain))
+
+    form.name.data = record.name
+
+    if not form.validate():
+        return render_template('domain_a_edit.html',
+                               domain=domain,
+                               form=form)
+
+    record.ip = form.ip.data
+    record.memo = form.memo.data
+    record.ddns = form.ddns.data
+    record.key = record.key or form.ddns.data and random_string(10) or None
+
+    with g.session.begin():
+        g.session.add(record)
 
     return redirect(url_for('domain.record_a', domain=domain.domain))

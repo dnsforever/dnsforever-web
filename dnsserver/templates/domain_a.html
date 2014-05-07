@@ -20,6 +20,7 @@ YJ DNS - Domain [{{ domain.domain }}]
             <th>Memo</th>
             <th>DDNS</th>
             <th>Key</th>
+            <th></th>
         </tr>
     </tbody>
     <tbody>
@@ -31,6 +32,10 @@ YJ DNS - Domain [{{ domain.domain }}]
             <th>{{ record.memo }}</th>
             <th>{% if record.ddns %}Enable{% else %}Disable{% endif %}</th>
             <th>{{ record.key or '' }}</th>
+            <th>
+              <a href="{{ url_for('domain.record_a_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
+              <a href="{{ '' }}" class="btn btn-danger btn-xs">Delete</a>
+            </th>
         </tr>
         {% endfor %}
     </tbody>

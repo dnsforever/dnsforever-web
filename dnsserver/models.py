@@ -79,20 +79,6 @@ class Domain(Base):
         return domain
 
 
-class RecordDDNS(Base):
-    __tablename__ = 'record_ddns'
-
-    id = Column(Integer, primary_key=True)
-
-    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
-                       index=True)
-    domain = relationship(Domain, backref='ddns')
-
-    name = Column(String(256), nullable=True)
-    ip = Column(String(16), nullable=False)
-    memo = Column(Unicode(1024), default=u'')
-
-
 class RecordA(Base):
     __tablename__ = 'record_a'
 
@@ -102,9 +88,14 @@ class RecordA(Base):
                        index=True)
     domain = relationship(Domain, backref='a')
 
+    ttl = Column(Integer, nullable=False, default=14400)
+
     name = Column(String(256), nullable=True)
     ip = Column(String(16), nullable=False)
     memo = Column(Unicode(1024), default=u'')
+
+    ddns = Column(Boolean, nullable=False, default=False)
+    key = Column(String(10), nullable=True, index=True)
 
 
 class RecordAAAA(Base):
@@ -115,6 +106,8 @@ class RecordAAAA(Base):
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
     domain = relationship(Domain, backref='aaaa')
+
+    ttl = Column(Integer, nullable=False, default=14400)
 
     name = Column(String(256), nullable=True)
     ip = Column(String(40), nullable=False)
@@ -130,6 +123,8 @@ class RecordCNAME(Base):
                        index=True)
     domain = relationship(Domain, backref='cname')
 
+    ttl = Column(Integer, nullable=False, default=14400)
+
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
     memo = Column(Unicode(1024), default=u'')
@@ -144,6 +139,8 @@ class RecordMX(Base):
                        index=True)
     domain = relationship(Domain, backref='mx')
 
+    ttl = Column(Integer, nullable=False, default=14400)
+
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
     rank = Column(Integer)
@@ -157,6 +154,8 @@ class RecordTXT(Base):
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
     domain = relationship(Domain, backref='txt')
+
+    ttl = Column(Integer, nullable=False, default=14400)
 
     name = Column(String(256), nullable=True)
     text = Column(String(256), nullable=False)

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
 {% block title %}
-YJ DNS - Domain [{{ domain_name }}]
+YJ DNS - Domain [{{ domain.domain }}]
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>Domain Setting <small>{{ domain_name }}</small></h1>
+<h1>Domain Setting <small>{{ domain.domain }}</small></h1>
 
 <h2>A Record</h2>
 <table class="table table-hover">
@@ -21,14 +21,17 @@ YJ DNS - Domain [{{ domain_name }}]
         </tr>
     </tbody>
     <tbody>
+        {% for record in domain.a[:5] %}
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain_name }}</td>
-            <th>127.0.0.1</th>
-            <th></th>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}{% if record.ddns %}(DDNS){% endif %}</th>
+            <th>{{ record.ip }}</th>
+            <th>{{ record.memo }}</th>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
+<a href="{{ url_for('domain.record_a', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
 
 <h2>AAAA Record</h2>
 <table class="table table-hover">
@@ -43,7 +46,7 @@ YJ DNS - Domain [{{ domain_name }}]
     <tbody>
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain_name }}</td>
+            <td>{{ domain.domain }}</td>
             <th>127.0.0.1</th>
             <th></th>
         </tr>
@@ -63,7 +66,7 @@ YJ DNS - Domain [{{ domain_name }}]
     <tbody>
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain_name }}</td>
+            <td>{{ domain.domain }}</td>
             <th>127.0.0.1</th>
             <th></th>
         </tr>
@@ -83,7 +86,7 @@ YJ DNS - Domain [{{ domain_name }}]
     <tbody>
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain_name }}</td>
+            <td>{{ domain.domain }}</td>
             <th>127.0.0.1</th>
             <th></th>
         </tr>
@@ -103,7 +106,7 @@ YJ DNS - Domain [{{ domain_name }}]
     <tbody>
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain_name }}</td>
+            <td>{{ domain.domain }}</td>
             <th>127.0.0.1</th>
             <th></th>
         </tr>

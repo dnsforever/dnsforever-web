@@ -158,4 +158,4 @@ class RecordTXT(Base):
     ttl = Column(Integer, nullable=False, default=14400)
 
     name = Column(String(256), nullable=True)
-    text = Column(String(256), nullable=False)
+    txt = Column(String(256), nullable=False)

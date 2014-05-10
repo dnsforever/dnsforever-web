@@ -119,21 +119,20 @@ YJ DNS - Domain [{{ domain.domain }}]
         <tr>
             <th width="30"></th>
             <th>Hostname</th>
-            <th>IP Address</th>
-            <th>Memo</th>
+            <th>TXT</th>
         </tr>
     </tbody>
     <tbody>
-        {% for record in domain.cname[:5] %}
+        {% for record in domain.txt[:5] %}
         <tr>
             <td><input type="checkbox"></td>
             <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
-            <th>{{ record.target }}</th>
-            <th>{{ record.memo }}</th>
+            <th>{{ record.txt }}</th>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+<a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
 {% endif %}
 
 <h2>Add new record</h2>
@@ -150,7 +149,7 @@ YJ DNS - Domain [{{ domain.domain }}]
 {% if not domain.mx %}
     <a href="{{ url_for('domain_mx.record_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
 {% endif %}
-{% if False and not domain.txt %}
+{% if not domain.txt %}
     <a href="{{ url_for('domain_txt.record_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT Record</a>
 {% endif %}
 </div>

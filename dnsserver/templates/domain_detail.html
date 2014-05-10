@@ -10,6 +10,7 @@ YJ DNS - Domain [{{ domain.domain }}]
 {% block body %}
 <h1>Domain Setting <small>{{ domain.domain }}</small></h1>
 
+{% if domain.a %}
 <h2>A Record</h2>
 <table class="table table-hover">
     <thead>
@@ -32,7 +33,9 @@ YJ DNS - Domain [{{ domain.domain }}]
     </tbody>
 </table>
 <a href="{{ url_for('domain.record_a', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+{% endif %}
 
+{% if domain.aaaa %}
 <h2>AAAA Record</h2>
 <table class="table table-hover">
     <thead>
@@ -53,6 +56,9 @@ YJ DNS - Domain [{{ domain.domain }}]
     </tbody>
 </table>
 
+{% endif %}
+
+{% if domain.cname %}
 <h2>CNAME Record</h2>
 <table class="table table-hover">
     <thead>
@@ -73,6 +79,9 @@ YJ DNS - Domain [{{ domain.domain }}]
     </tbody>
 </table>
 
+{% endif %}
+
+{% if domain.mx %}
 <h2>MX Record</h2>
 <table class="table table-hover">
     <thead>
@@ -93,6 +102,9 @@ YJ DNS - Domain [{{ domain.domain }}]
     </tbody>
 </table>
 
+{% endif %}
+
+{% if domain.txt %}
 <h2>TXT Record</h2>
 <table class="table table-hover">
     <thead>
@@ -112,9 +124,26 @@ YJ DNS - Domain [{{ domain.domain }}]
         </tr>
     </tbody>
 </table>
-<div class="pull-right">
-    <button type="submit" class="btn btn-primary">New</button>
-    <button type="submit" class="btn btn-danger">Delete</button>
+{% endif %}
+
+<h2>Add new record</h2>
+<div>
+{% if not domain.a %}
+    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A Record(DDNS)</a>
+{% endif %}
+{% if not domain.aaaa %}
+    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA Record</a>
+{% endif %}
+{% if not domain.cname %}
+    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME Record</a>
+{% endif %}
+{% if not domain.mx %}
+    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
+{% endif %}
+{% if not domain.txt %}
+    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT Record</a>
+{% endif %}
 </div>
+
 {% endblock %}
 

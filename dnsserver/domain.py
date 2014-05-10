@@ -80,6 +80,9 @@ def record_a(domain):
     records = g.session.query(RecordA).filter(RecordA.domain == domain)\
                                       .order_by(RecordA.name).all()
 
+    if not records:
+        return redirect(url_for('domain.record_a_new', domain=domain.domain))
+
     return render_template('domain_a.html',
                            domain=domain,
                            records=records)

@@ -42,20 +42,22 @@ YJ DNS - Domain [{{ domain.domain }}]
         <tr>
             <th width="30"></th>
             <th>Hostname</th>
-            <th>IP Address</th>
+            <th>IPv6 Address</th>
             <th>Memo</th>
         </tr>
     </tbody>
     <tbody>
+        {% for record in domain.aaaa[:5] %}
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain.domain }}</td>
-            <th>127.0.0.1</th>
-            <th></th>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}{% if record.ddns %}(DDNS){% endif %}</th>
+            <th>{{ record.ip }}</th>
+            <th>{{ record.memo }}</th>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
-
+<a href="{{ url_for('domain.record_aaaa', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
 {% endif %}
 
 {% if domain.cname %}
@@ -132,16 +134,16 @@ YJ DNS - Domain [{{ domain.domain }}]
     <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A Record(DDNS)</a>
 {% endif %}
 {% if not domain.aaaa %}
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA Record</a>
+    <a href="{{ url_for('domain.record_aaaa_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA Record</a>
 {% endif %}
-{% if not domain.cname %}
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME Record</a>
+{% if False and not domain.cname %}
+    <a href="{{ url_for('domain.record_cname_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME Record</a>
 {% endif %}
-{% if not domain.mx %}
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
+{% if False and not domain.mx %}
+    <a href="{{ url_for('domain.record_mx_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
 {% endif %}
-{% if not domain.txt %}
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT Record</a>
+{% if False and not domain.txt %}
+    <a href="{{ url_for('domain.record_txt_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT Record</a>
 {% endif %}
 </div>
 

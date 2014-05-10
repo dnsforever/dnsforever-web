@@ -93,19 +93,22 @@ YJ DNS - Domain [{{ domain.domain }}]
         <tr>
             <th width="30"></th>
             <th>Hostname</th>
-            <th>IP Address</th>
-            <th>Memo</th>
+            <th>Mail Server</th>
+            <th>Rank</th>
         </tr>
     </tbody>
     <tbody>
+        {% for record in domain.mx[:5] %}
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain.domain }}</td>
-            <th>127.0.0.1</th>
-            <th></th>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
+            <th>{{ record.target }}</th>
+            <th>{{ record.rank }}</th>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
+<a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
 
 {% endif %}
 
@@ -121,12 +124,14 @@ YJ DNS - Domain [{{ domain.domain }}]
         </tr>
     </tbody>
     <tbody>
+        {% for record in domain.cname[:5] %}
         <tr>
             <td><input type="checkbox"></td>
-            <td>{{ domain.domain }}</td>
-            <th>127.0.0.1</th>
-            <th></th>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
+            <th>{{ record.target }}</th>
+            <th>{{ record.memo }}</th>
         </tr>
+        {% endfor %}
     </tbody>
 </table>
 {% endif %}
@@ -142,7 +147,7 @@ YJ DNS - Domain [{{ domain.domain }}]
 {% if not domain.cname %}
     <a href="{{ url_for('domain_cname.record_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME Record</a>
 {% endif %}
-{% if False and not domain.mx %}
+{% if not domain.mx %}
     <a href="{{ url_for('domain_mx.record_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
 {% endif %}
 {% if False and not domain.txt %}

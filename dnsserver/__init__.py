@@ -4,7 +4,7 @@ from dnsserver.models import Session
 from dnsserver.tools.session import get_user
 
 
-blueprints = ['index', 'account', 'domain', 'domain_a']
+blueprints = ['index', 'account', 'domain', 'domain_a', 'domain_aaaa']
 
 
 def create_app():

@@ -29,8 +29,8 @@ YJ DNS - Domain [{{ domain.domain }}]
             <th>{{ record.ip }}</th>
             <th>{{ record.memo }}</th>
             <th>
-              <a href="{{ url_for('domain.record_aaaa_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
-              <a href="{{ url_for('domain.record_aaaa_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">Delete</a>
+              <a href="{{ url_for('domain_aaaa.record_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
+              <a href="{{ url_for('domain_aaaa.record_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">Delete</a>
             </th>
         </tr>
         {% endfor %}
@@ -38,8 +38,8 @@ YJ DNS - Domain [{{ domain.domain }}]
 </table>
 
 <div class="pull-right">
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-primary">New</a>
-    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="{{ url_for('domain_aaaa.record_new', domain=domain.domain) }}" class="btn btn-primary">New</a>
+    <!-- button type="submit" class="btn btn-danger">Delete</button -->
 </div>
 {% endblock %}
 

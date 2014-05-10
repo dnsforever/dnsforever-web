@@ -32,7 +32,7 @@ YJ DNS - Domain [{{ domain.domain }}]
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('domain.record_a', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+<a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
 {% endif %}
 
 {% if domain.aaaa %}
@@ -131,7 +131,7 @@ YJ DNS - Domain [{{ domain.domain }}]
 <h2>Add new record</h2>
 <div>
 {% if not domain.a %}
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A Record(DDNS)</a>
+    <a href="{{ url_for('domain_a.record_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A Record(DDNS)</a>
 {% endif %}
 {% if not domain.aaaa %}
     <a href="{{ url_for('domain.record_aaaa_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA Record</a>

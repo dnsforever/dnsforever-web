@@ -17,7 +17,7 @@ YJ DNS - Domain [{{ domain.domain }}]
         </div>
         <div class="panel-body">
             <button type="submit" class="btn btn-danger">Delete</button>
-            <a href="{{ url_for('domain.record_a', domain=domain.domain) }}" class="btn btn-primary">Cancel</a>
+            <a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}" class="btn btn-primary">Cancel</a>
         </div>
     </div>
 </form>

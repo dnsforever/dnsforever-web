@@ -33,8 +33,8 @@ YJ DNS - Domain [{{ domain.domain }}]
             <th>{% if record.ddns %}Enable{% else %}Disable{% endif %}</th>
             <th>{{ record.key or '' }}</th>
             <th>
-              <a href="{{ url_for('domain.record_a_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
-              <a href="{{ url_for('domain.record_a_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">Delete</a>
+              <a href="{{ url_for('domain_a.record_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
+              <a href="{{ url_for('domain_a.record_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">Delete</a>
             </th>
         </tr>
         {% endfor %}
@@ -42,8 +42,8 @@ YJ DNS - Domain [{{ domain.domain }}]
 </table>
 
 <div class="pull-right">
-    <a href="{{ url_for('domain.record_a_new', domain=domain.domain) }}" class="btn btn-primary">New</a>
-    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="{{ url_for('domain_a.record_new', domain=domain.domain) }}" class="btn btn-primary">New</a>
+    <!--button type="submit" class="btn btn-danger">Delete</button-->
 </div>
 {% endblock %}
 

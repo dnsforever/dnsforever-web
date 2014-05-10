@@ -83,7 +83,7 @@ def record_a(domain):
     if not records:
         return redirect(url_for('domain.record_a_new', domain=domain.domain))
 
-    return render_template('domain_a.html',
+    return render_template('domain_a/list.html',
                            domain=domain,
                            records=records)
 
@@ -109,7 +109,7 @@ def record_a_new(domain):
 
     form = RecordAForm(ip=request.remote_addr)
 
-    return render_template('domain_a_new.html',
+    return render_template('domain_a/new.html',
                            domain=domain,
                            form=form)
 
@@ -132,7 +132,7 @@ def record_a_edit(domain, record_id):
     form = RecordAForm(name=record.name, ip=record.ip, memo=record.memo,
                        ddns=record.ddns)
 
-    return render_template('domain_a_edit.html',
+    return render_template('domain_a/edit.html',
                            domain=domain,
                            form=form)
 
@@ -148,7 +148,7 @@ def record_a_new_process(domain):
         return redirect(url_for('domain.index'))
 
     if not form.validate():
-        return render_template('domain_a_new.html',
+        return render_template('domain_a/new.html',
                                domain=domain,
                                form=form)
 
@@ -184,7 +184,7 @@ def record_a_edit_process(domain, record_id):
     form.name.data = record.name
 
     if not form.validate():
-        return render_template('domain_a_edit.html',
+        return render_template('domain_a/edit.html',
                                domain=domain,
                                form=form)
 
@@ -219,7 +219,7 @@ def record_a_delete(domain, record_id):
             g.session.delete(record)
         return redirect(url_for('domain.record_a', domain=domain.domain))
 
-    return render_template('domain_a_del.html', domain=domain, record=record)
+    return render_template('domain_a/del.html', domain=domain, record=record)
 
 
 @app.route('/<string:domain>/aaaa', methods=['GET', 'POST'])
@@ -238,7 +238,7 @@ def record_aaaa(domain):
         return redirect(url_for('domain.record_aaaa_new',
                                 domain=domain.domain))
 
-    return render_template('domain_aaaa.html',
+    return render_template('domain_aaaa/list.html',
                            domain=domain,
                            records=records)
 
@@ -263,7 +263,7 @@ def record_aaaa_new(domain):
 
     form = RecordAAAAForm()
 
-    return render_template('domain_aaaa_new.html',
+    return render_template('domain_aaaa/new.html',
                            domain=domain,
                            form=form)
 
@@ -285,7 +285,7 @@ def record_aaaa_edit(domain, record_id):
 
     form = RecordAAAAForm(name=record.name, ip=record.ip, memo=record.memo)
 
-    return render_template('domain_aaaa_edit.html',
+    return render_template('domain_aaaa/edit.html',
                            domain=domain,
                            form=form)
 
@@ -301,7 +301,7 @@ def record_aaaa_new_process(domain):
         return redirect(url_for('domain.index'))
 
     if not form.validate():
-        return render_template('domain_aaaa_new.html',
+        return render_template('domain_aaaa/new.html',
                                domain=domain,
                                form=form)
 
@@ -335,7 +335,7 @@ def record_aaaa_edit_process(domain, record_id):
     form.name.data = record.name
 
     if not form.validate():
-        return render_template('domain_aaaa_edit.html',
+        return render_template('domain_aaaa/edit.html',
                                domain=domain,
                                form=form)
 
@@ -369,5 +369,5 @@ def record_aaaa_delete(domain, record_id):
             g.session.delete(record)
         return redirect(url_for('domain.record_aaaa', domain=domain.domain))
 
-    return render_template('domain_aaaa_del.html', domain=domain,
+    return render_template('domain_aaaa/del.html', domain=domain,
                            record=record)

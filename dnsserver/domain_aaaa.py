@@ -8,7 +8,7 @@ app = Blueprint('domain_aaaa', __name__,
                 template_folder='templates/domain_aaaa')
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 @login(True, '/')
 def record_list(domain):
     domain = g.session.query(Domain).filter(Domain.domain.like(domain))\

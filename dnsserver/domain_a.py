@@ -7,7 +7,7 @@ from dnsserver.models import Domain, RecordA
 app = Blueprint('domain_a', __name__, url_prefix='/domain/<string:domain>/a')
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 @login(True, '/')
 def record_list(domain):
     domain = g.session.query(Domain).filter(Domain.domain.like(domain))\

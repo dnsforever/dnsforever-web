@@ -89,8 +89,14 @@ def record_new_process(domain):
                                domain=domain,
                                form=form)
 
-    txt_record = RecordTXT(domain=domain,
-                           txt=form.txt.data)
+    try:
+        txt_record = RecordTXT(domain=domain,
+                               txt=form.txt.data)
+    except ValueError as e:
+        form.name.errors.append(e)
+        return render_template('domain_txt/new.html',
+                               domain=domain,
+                               form=form)
 
     with g.session.begin():
         g.session.add(txt_record)

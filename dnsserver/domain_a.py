@@ -91,12 +91,18 @@ def record_new_process(domain):
                                domain=domain,
                                form=form)
 
-    a_record = RecordA(domain=domain,
-                       name=form.name.data or None,
-                       ip=form.ip.data,
-                       memo=form.memo.data,
-                       ddns=form.ddns.data,
-                       key=form.ddns.data and random_string(10) or None)
+    try:
+        a_record = RecordA(domain=domain,
+                           name=form.name.data or None,
+                           ip=form.ip.data,
+                           memo=form.memo.data,
+                           ddns=form.ddns.data,
+                           key=form.ddns.data and random_string(10) or None)
+    except ValueError as e:
+        form.name.errors.append(e)
+        return render_template('domain_a/new.html',
+                               domain=domain,
+                               form=form)
 
     with g.session.begin():
         g.session.add(a_record)

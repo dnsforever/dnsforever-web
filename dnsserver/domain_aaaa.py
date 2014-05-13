@@ -90,10 +90,16 @@ def record_new_process(domain):
                                domain=domain,
                                form=form)
 
-    aaaa_record = RecordAAAA(domain=domain,
-                             name=form.name.data or None,
-                             ip=form.ip.data,
-                             memo=form.memo.data)
+    try:
+        aaaa_record = RecordAAAA(domain=domain,
+                                 name=form.name.data or None,
+                                 ip=form.ip.data,
+                                 memo=form.memo.data)
+    except ValueError as e:
+        form.name.errors.append(e)
+        return render_template('domain_aaaa/new.html',
+                               domain=domain,
+                               form=form)
 
     with g.session.begin():
         g.session.add(aaaa_record)

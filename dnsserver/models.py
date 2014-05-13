@@ -21,6 +21,15 @@ def _serialize(self):
 Base.serialize = _serialize
 
 
+def check_domain(domain):
+    if len(domain) > 255:
+        raise ValueError('Domain name is too long.')
+    for label in domain.split('.'):
+        if len(label) > 63:
+            raise ValueError('Domain name is too long.')
+    return True
+
+
 class User(Base):
     __tablename__ = 'user'
 
@@ -76,6 +85,8 @@ class Domain(Base):
             raise ValueError
         if not self.DOMAIN_PATTERN.match(domain):
             raise ValueError
+
+        check_domain(domain)
         return domain
 
 
@@ -106,6 +117,8 @@ class RecordA(Base):
             self.fullname = self.domain.domain
         else:
             self.fullname = '%s.%s' % (name, self.domain.domain)
+
+        check_domain(self.fullname)
         return name
 
 
@@ -134,6 +147,8 @@ class RecordAAAA(Base):
             self.fullname = self.domain.domain
         else:
             self.fullname = '%s.%s' % (name, self.domain.domain)
+
+        check_domain(self.fullname)
         return name
 
 
@@ -162,6 +177,8 @@ class RecordCNAME(Base):
             self.fullname = self.domain.domain
         else:
             self.fullname = '%s.%s' % (name, self.domain.domain)
+
+        check_domain(self.fullname)
         return name
 
 
@@ -190,6 +207,8 @@ class RecordMX(Base):
             self.fullname = self.domain.domain
         else:
             self.fullname = '%s.%s' % (name, self.domain.domain)
+
+        check_domain(self.fullname)
         return name
 
 
@@ -217,4 +236,6 @@ class RecordTXT(Base):
             self.fullname = self.domain.domain
         else:
             self.fullname = '%s.%s' % (name, self.domain.domain)
+
+        check_domain(self.fullname)
         return name

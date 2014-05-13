@@ -32,8 +32,7 @@ def record_list(domain):
 
 
 class RecordCNAMEForm(Form):
-    name = TextField('name', [Regexp('(^$)|'
-                                     '(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
+    name = TextField('name', [Regexp('(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
     # TODO: Check max length of name.
     target = TextField('target', [Regexp('(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
     memo = TextField('memo', [Length(max=1000)])
@@ -103,10 +102,16 @@ def record_new_process(domain):
                                domain=domain,
                                form=form)
 
-    cname_record = RecordCNAME(domain=domain,
-                               name=form.name.data or None,
-                               target=form.target.data,
-                               memo=form.memo.data)
+    try:
+        cname_record = RecordCNAME(domain=domain,
+                                   name=form.name.data or None,
+                                   target=form.target.data,
+                                   memo=form.memo.data)
+    except ValueError as e:
+        form.name.errors.append(e)
+        return render_template('domain_cname/new.html',
+                               domain=domain,
+                               form=form)
 
     with g.session.begin():
         g.session.add(cname_record)

@@ -93,10 +93,16 @@ def record_new_process(domain):
                                domain=domain,
                                form=form)
 
-    mx_record = RecordMX(domain=domain,
-                         name=form.name.data or None,
-                         target=form.target.data,
-                         rank=form.rank.data)
+    try:
+        mx_record = RecordMX(domain=domain,
+                             name=form.name.data or None,
+                             target=form.target.data,
+                             rank=form.rank.data)
+    except ValueError as e:
+        form.name.errors.append(e)
+        return render_template('domain_mx/new.html',
+                               domain=domain,
+                               form=form)
 
     with g.session.begin():
         g.session.add(mx_record)

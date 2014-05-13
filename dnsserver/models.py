@@ -97,6 +97,17 @@ class RecordA(Base):
     ddns = Column(Boolean, nullable=False, default=False)
     key = Column(String(10), nullable=True, index=True)
 
+    # Column for optimise indexing time.
+    fullname = Column(String(256), index=True, nullable=False)
+
+    @validates('name')
+    def name_validates(self, key, name):
+        if name is None:
+            self.fullname = self.domain.domain
+        else:
+            self.fullname = '%s.%s' % (name, self.domain.domain)
+        return name
+
 
 class RecordAAAA(Base):
     __tablename__ = 'record_aaaa'
@@ -109,9 +120,21 @@ class RecordAAAA(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
+    fullname = Column(String(256), nullable=True)
     name = Column(String(256), nullable=True)
     ip = Column(String(40), nullable=False)
     memo = Column(Unicode(1024), default=u'')
+
+    # Column for optimise indexing time.
+    fullname = Column(String(256), index=True, nullable=False)
+
+    @validates('name')
+    def name_validates(self, key, name):
+        if name is None:
+            self.fullname = self.domain.domain
+        else:
+            self.fullname = '%s.%s' % (name, self.domain.domain)
+        return name
 
 
 class RecordCNAME(Base):
@@ -125,9 +148,21 @@ class RecordCNAME(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
+    fullname = Column(String(256), nullable=True)
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
     memo = Column(Unicode(1024), default=u'')
+
+    # Column for optimise indexing time.
+    fullname = Column(String(256), index=True, nullable=False)
+
+    @validates('name')
+    def name_validates(self, key, name):
+        if name is None:
+            self.fullname = self.domain.domain
+        else:
+            self.fullname = '%s.%s' % (name, self.domain.domain)
+        return name
 
 
 class RecordMX(Base):
@@ -141,9 +176,21 @@ class RecordMX(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
+    fullname = Column(String(256), nullable=True)
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
     rank = Column(Integer)
+
+    # Column for optimise indexing time.
+    fullname = Column(String(256), index=True, nullable=False)
+
+    @validates('name')
+    def name_validates(self, key, name):
+        if name is None:
+            self.fullname = self.domain.domain
+        else:
+            self.fullname = '%s.%s' % (name, self.domain.domain)
+        return name
 
 
 class RecordTXT(Base):
@@ -157,5 +204,17 @@ class RecordTXT(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
+    fullname = Column(String(256), nullable=True)
     name = Column(String(256), nullable=True)
     txt = Column(String(256), nullable=False)
+
+    # Column for optimise indexing time.
+    fullname = Column(String(256), index=True, nullable=False)
+
+    @validates('name')
+    def name_validates(self, key, name):
+        if name is None:
+            self.fullname = self.domain.domain
+        else:
+            self.fullname = '%s.%s' % (name, self.domain.domain)
+        return name

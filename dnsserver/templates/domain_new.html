@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}
+YJ DNS - New Domain
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Add Domain</h1>
+
+<form class="form-horizontal" role="form" method="post">
+  <div class="form-group">
+    <label for="inputDomain" class="col-sm-2 control-label">Domain</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" rows="3" id="inputDomain" name="domain" placeholder="example.com"></textarea>
+    </div>
+  </div>
+  {% if error_domains %}
+  {% if domains != error_domains %}
+  <div class="col-md-10 col-md-offset-2 alert alert-success">
+    <p>Registered successfully.</p>
+    <ul>
+      {% for domain in domains %}
+      {% if domain not in domains%}
+      <li>{{ domain }}</li>
+      {% endif %}
+      {% endfor %}
+    <ul>
+  </div>
+  {% endif %}
+  <div class="col-md-10 col-md-offset-2 alert alert-danger">
+    <p>Some error has occurred.</p>
+    <ul>
+      {% for domain in error_domains %}
+      <li>{{ domain }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+  <div class="form-group pull-right">
+    <button type="submit" class="btn btn-primary">Add</button>
+    <!-- <button type="reset" class="btn btn-danger">Reset</button> -->
+  </div>
+</form>
+
+{% endblock %}
+

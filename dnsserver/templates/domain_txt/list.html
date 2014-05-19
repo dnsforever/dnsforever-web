@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}
+YJ DNS - Domain [{{ domain.domain }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>TXT Record Setting <small>{{ domain.domain }}</small></h1>
+
+<h2>TXT Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>TXT</th>
+            <th></th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</td>
+            <th>{{ record.txt }}</th>
+            <th>
+              <a href="{{ url_for('domain_txt.record_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
+              <a href="{{ url_for('domain_txt.record_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">Delete</a>
+            </th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pull-right">
+    <a href="{{ url_for('domain_txt.record_new', domain=domain.domain) }}" class="btn btn-primary">New</a>
+    <!-- button type="submit" class="btn btn-danger">Delete</button -->
+</div>
+{% endblock %}
+

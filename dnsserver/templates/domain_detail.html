@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}
+YJ DNS - Domain [{{ domain.domain }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>Domain Setting <small>{{ domain.domain }}</small></h1>
+
+{% if domain.a %}
+<h2>A Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IP Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in domain.a[:5] %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}{% if record.ddns %}(DDNS){% endif %}</th>
+            <th>{{ record.ip }}</th>
+            <th>{{ record.memo }}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+{% endif %}
+
+{% if domain.aaaa %}
+<h2>AAAA Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>IPv6 Address</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in domain.aaaa[:5] %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
+            <th>{{ record.ip }}</th>
+            <th>{{ record.memo }}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('domain_aaaa.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+{% endif %}
+
+{% if domain.cname %}
+<h2>CNAME Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>Target Domain</th>
+            <th>Memo</th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in domain.cname[:5] %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
+            <th>{{ record.target }}</th>
+            <th>{{ record.memo }}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('domain_cname.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+
+{% endif %}
+
+{% if domain.mx %}
+<h2>MX Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>Mail Server</th>
+            <th>Rank</th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in domain.mx[:5] %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
+            <th>{{ record.target }}</th>
+            <th>{{ record.rank }}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+
+{% endif %}
+
+{% if domain.txt %}
+<h2>TXT Record</h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>Hostname</th>
+            <th>TXT</th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in domain.txt[:5] %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
+            <th>{{ record.txt }}</th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+{% endif %}
+
+<h2>Add new record</h2>
+<div>
+{% if not domain.a %}
+    <a href="{{ url_for('domain_a.record_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A Record(DDNS)</a>
+{% endif %}
+{% if not domain.aaaa %}
+    <a href="{{ url_for('domain_aaaa.record_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA Record</a>
+{% endif %}
+{% if not domain.cname %}
+    <a href="{{ url_for('domain_cname.record_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME Record</a>
+{% endif %}
+{% if not domain.mx %}
+    <a href="{{ url_for('domain_mx.record_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
+{% endif %}
+{% if not domain.txt %}
+    <a href="{{ url_for('domain_txt.record_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT Record</a>
+{% endif %}
+</div>
+
+{% endblock %}
+

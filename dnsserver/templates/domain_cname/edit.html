@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% macro form_field(field, id, label=None) -%}
+<div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+    {% if label -%}
+    <label for="{{ id }}" class="col-sm-2 control-label">{{ label }}</label>
+    {% endif -%}
+    <div class="col-sm-10">
+      {% if field.type == 'BooleanField' %}
+      <div class="checkbox">
+        <label>
+          {{ field(id=id, **kwargs) }}
+        </label>
+      </div>
+      {% else %}
+      {{ field(class_='form-control', id=id, **kwargs) }}
+      {% if field.errors %}
+      <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+      {% for error in field.errors %}
+      <span class="help-inline">{{ error }}</span>
+      {% endfor %}
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{%- endmacro %}
+
+{% block title %}
+YJ DNS - Domain [{{ domain.domain }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>New CNAME Record <small>{{ domain.domain }}</small></h1>
+
+<form id="formSignUp" class="form-horizontal" role="form" method="post">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Name</label>
+    <div class="col-sm-10">
+      <p class="form-control-static">{{ form.name.data and (form.name.data + '.') or '' }}{{ domain.domain }}</p>
+    </div>
+  </div>
+  {{ form_field(form.target, 'inputTarget', 'Target Domain', placeholder='Target Domain') }}
+  {{ form_field(form.memo, 'inputMemo', 'Memo', placeholder='Memo') }}
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Edit CNAME Record</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+

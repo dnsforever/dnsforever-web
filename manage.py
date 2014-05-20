@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 from flask.ext.script import Manager
-from dnsforever import create_app
+from dnsforever import web
 from dnsforever.models import Base, engine
 
-app = create_app()
+app = web.create_app()
 manager = Manager(app)
 
 

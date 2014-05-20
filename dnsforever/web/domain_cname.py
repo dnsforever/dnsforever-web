@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template, request, url_for, redirect
 from wtforms import Form, TextField
 from wtforms.validators import Length, Regexp
-from dnsforever.tools.session import login, get_user
+from dnsforever.web.tools.session import login, get_user
 from dnsforever.models import Domain, RecordCNAME
 
 app = Blueprint('domain_cname', __name__,

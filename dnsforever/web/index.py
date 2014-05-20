@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from dnsforever.tools.session import login
+from dnsforever.web.tools.session import login
 
 app = Blueprint('index', __name__)
 

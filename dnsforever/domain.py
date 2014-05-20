@@ -1,6 +1,6 @@
 from flask import Blueprint, g, render_template, request, url_for, redirect
-from dnsserver.tools.session import login, get_user
-from dnsserver.models import Domain
+from dnsforever.tools.session import login, get_user
+from dnsforever.models import Domain
 import re
 
 DOMAIN_PATTERN = re.compile('^([a-z0-9\-]+\.)+([a-z0-9\-]+)$')

@@ -1,7 +1,7 @@
 from flask import session, redirect, g
 from functools import wraps
 
-from dnsserver.models import User
+from dnsforever.models import User
 
 
 def set_user(user):

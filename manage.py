@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask.ext.script import Manager
-from dnsserver import create_app
-from dnsserver.models import Base, engine
+from dnsforever import create_app
+from dnsforever.models import Base, engine
 
 app = create_app()
 manager = Manager(app)

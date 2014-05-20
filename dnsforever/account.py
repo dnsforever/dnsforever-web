@@ -2,8 +2,8 @@ from flask import Blueprint, g, render_template, redirect, url_for, request
 from wtforms import Form, TextField, PasswordField, validators, ValidationError
 from hashlib import sha256
 
-from dnsserver.models import User
-from dnsserver.tools.session import login, set_user
+from dnsforever.models import User
+from dnsforever.tools.session import login, set_user
 
 app = Blueprint('account', __name__)
 

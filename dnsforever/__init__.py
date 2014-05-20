@@ -1,7 +1,7 @@
 from flask import Flask, g
 
-from dnsserver.models import Session
-from dnsserver.tools.session import get_user
+from dnsforever.models import Session
+from dnsforever.tools.session import get_user
 
 
 blueprints = ['index', 'account', 'domain',
@@ -32,6 +32,6 @@ def create_app():
 
 
 def load_blueprint(name):
-    module = __import__('dnsserver.' + name, None, None, ['app'])
+    module = __import__('dnsforever.' + name, None, None, ['app'])
     blueprint = getattr(module, 'app')
     return blueprint

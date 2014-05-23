@@ -11,5 +11,6 @@ setup(
                       'Flask-WTF>=0.9.5',
                       'Werkzeug>=0.7',
                       'Jinja2>=2.4',
-                      'SQLAlchemy>=0.9.4']
+                      'SQLAlchemy>=0.9.4',
+                      'Twisted>=14.0.0']
 )

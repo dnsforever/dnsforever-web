@@ -20,9 +20,7 @@ def create_app():
     def define_session():
         g.session = Session()
 
-        # TODO: load user info
         g.user = get_user()
-        # TODO: load domain list
         if g.user:
             g.domain_list = [domain.domain for domain in g.user.domain]
         else:

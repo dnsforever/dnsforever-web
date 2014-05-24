@@ -15,7 +15,7 @@
         <tr>
             <th width="30"></th>
             <th>Domain</th>
-            <th>Status</th>
+            <!-- th>Status</th -->
             <th width="80">A(DDNS)</th>
             <th width="80">AAAA</th>
             <th width="80">CNAME</th>
@@ -27,13 +27,13 @@
         {% for domain in domain_list %}
         <tr>
             <td><input type="checkbox"></td>
-            <td><a href="{{ url_for('domain.detail', domain=domain) }}">{{ domain }}</a></td>
-            <th>Good</th>
-            <th>1(1)</th>
-            <th>1</th>
-            <th>1</th>
-            <th>1</th>
-            <th>1</th>
+            <td><a href="{{ url_for('domain.detail', domain=domain.domain) }}">{{ domain.domain }}</a></td>
+            <!-- th>Good</th -->
+            <th><a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}">{{ domain.count_a or 0 }}({{ domain.count_ddns or 0 }})</a></th>
+            <th><a href="{{ url_for('domain_aaaa.record_list', domain=domain.domain) }}">{{ domain.count_aaaa or 0 }}</a></th>
+            <th><a href="{{ url_for('domain_cname.record_list', domain=domain.domain) }}">{{ domain.count_cname or 0 }}</a></th>
+            <th><a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}">{{ domain.count_mx or 0 }}</a></th>
+            <th><a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}">{{ domain.count_txt or 0 }}</a></th>
         </tr>
         {% endfor %}
     </tbody>

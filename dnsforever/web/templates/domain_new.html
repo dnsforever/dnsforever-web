@@ -1,18 +1,18 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ g.service_name }} - New Domain
+{{ g.service_name }} - 도메인 추가
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>Add Domain</h1>
+<h1>도메인 추가</h1>
 
 <form class="form-horizontal" role="form" method="post">
   <div class="form-group">
-    <label for="inputDomain" class="col-sm-2 control-label">Domain</label>
+    <label for="inputDomain" class="col-sm-2 control-label">도메인</label>
     <div class="col-sm-10">
       <textarea class="form-control" rows="3" id="inputDomain" name="domain" placeholder="example.com"></textarea>
     </div>
@@ -20,7 +20,7 @@
   {% if error_domains %}
   {% if domains != error_domains %}
   <div class="col-md-10 col-md-offset-2 alert alert-success">
-    <p>Registered successfully.</p>
+    <p>성공적으로 등록되었습니다.</p>
     <ul>
       {% for domain in domains %}
       {% if domain not in domains%}
@@ -31,7 +31,7 @@
   </div>
   {% endif %}
   <div class="col-md-10 col-md-offset-2 alert alert-danger">
-    <p>Some error has occurred.</p>
+    <p>다음 도메인을 등록하는 과정에서 문제가 발생했습니다.</p>
     <ul>
       {% for domain in error_domains %}
       <li>{{ domain }}</li>
@@ -40,7 +40,7 @@
   </div>
   {% endif %}
   <div class="form-group pull-right">
-    <button type="submit" class="btn btn-primary">Add</button>
+    <button type="submit" class="btn btn-primary">등록</button>
     <!-- <button type="reset" class="btn btn-danger">Reset</button> -->
   </div>
 </form>

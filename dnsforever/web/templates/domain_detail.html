@@ -1,24 +1,24 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ g.service_name }} - Domain [{{ domain.domain }}]
+{{ g.service_name }} - 도메인 설정 [{{ domain.domain }}]
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>Domain Setting <small>{{ domain.domain }}</small></h1>
+<h1>도메인 설정 <small>{{ domain.domain }}</small></h1>
 
 {% if domain.a %}
-<h2>A Record</h2>
+<h2>A 레코드</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             <th width="30"></th>
-            <th>Hostname</th>
-            <th>IP Address</th>
-            <th>Memo</th>
+            <th>호스트 이름</th>
+            <th>IP 주소</th>
+            <th>메모</th>
         </tr>
     </tbody>
     <tbody>
@@ -32,18 +32,18 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+<a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">더 보기...</a>
 {% endif %}
 
 {% if domain.aaaa %}
-<h2>AAAA Record</h2>
+<h2>AAAA 레코드</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             <th width="30"></th>
-            <th>Hostname</th>
-            <th>IPv6 Address</th>
-            <th>Memo</th>
+            <th>호스트 이름</th>
+            <th>IPv6 주소</th>
+            <th>메모</th>
         </tr>
     </tbody>
     <tbody>
@@ -57,18 +57,18 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('domain_aaaa.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+<a href="{{ url_for('domain_aaaa.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">더 보기...</a>
 {% endif %}
 
 {% if domain.cname %}
-<h2>CNAME Record</h2>
+<h2>CNAME 레코드</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             <th width="30"></th>
-            <th>Hostname</th>
-            <th>Target Domain</th>
-            <th>Memo</th>
+            <th>호스트 이름</th>
+            <th>목적지</th>
+            <th>메모</th>
         </tr>
     </tbody>
     <tbody>
@@ -82,19 +82,19 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('domain_cname.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+<a href="{{ url_for('domain_cname.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">더 보기...</a>
 
 {% endif %}
 
 {% if domain.mx %}
-<h2>MX Record</h2>
+<h2>MX 레코드</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             <th width="30"></th>
-            <th>Hostname</th>
-            <th>Mail Server</th>
-            <th>Rank</th>
+            <th>호스트 이름</th>
+            <th>메일서버</th>
+            <th>우선순위</th>
         </tr>
     </tbody>
     <tbody>
@@ -108,17 +108,17 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+<a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">더 보기...</a>
 
 {% endif %}
 
 {% if domain.txt %}
-<h2>TXT Record</h2>
+<h2>TXT 레코드</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             <th width="30"></th>
-            <th>Hostname</th>
+            <th>호스트 이름</th>
             <th>TXT</th>
         </tr>
     </tbody>
@@ -132,26 +132,16 @@
         {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">More...</a>
+<a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}" class="btn btn-default btn-block">더 보기...</a>
 {% endif %}
 
-<h2>Add new record</h2>
+<h2>새로운 레코드 추가</h2>
 <div>
-{% if not domain.a %}
-    <a href="{{ url_for('domain_a.record_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A Record(DDNS)</a>
-{% endif %}
-{% if not domain.aaaa %}
-    <a href="{{ url_for('domain_aaaa.record_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA Record</a>
-{% endif %}
-{% if not domain.cname %}
-    <a href="{{ url_for('domain_cname.record_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME Record</a>
-{% endif %}
-{% if not domain.mx %}
-    <a href="{{ url_for('domain_mx.record_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX Record</a>
-{% endif %}
-{% if not domain.txt %}
-    <a href="{{ url_for('domain_txt.record_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT Record</a>
-{% endif %}
+    <a href="{{ url_for('domain_a.record_new', domain=domain.domain) }}" class="btn btn-lg btn-primary">A 레코드(DDNS)</a>
+    <a href="{{ url_for('domain_aaaa.record_new', domain=domain.domain) }}" class="btn btn-lg btn-success">AAAA 레코드</a>
+    <a href="{{ url_for('domain_cname.record_new', domain=domain.domain) }}" class="btn btn-lg btn-info">CNAME 레코드</a>
+    <a href="{{ url_for('domain_mx.record_new', domain=domain.domain) }}" class="btn btn-lg btn-warning">MX 레코드</a>
+    <a href="{{ url_for('domain_txt.record_new', domain=domain.domain) }}" class="btn btn-lg btn-danger">TXT 레코드</a>
 </div>
 
 {% endblock %}

@@ -25,21 +25,21 @@
 {%- endmacro %}
 
 {% block title %}
-{{ g.service_name }} - AAAA Record [{{ domain.domain }}]
+{{ g.service_name }} - AAAA 레코드 추가 [{{ domain.domain }}]
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>New AAAA Record <small>{{ domain.domain }}</small></h1>
+<h1>AAAA 레코드 추가 <small>{{ domain.domain }}</small></h1>
 
 <form id="formSignUp" class="form-horizontal" role="form" method="post">
   <div class="form-group{% if form.name.errors %} has-error has-feedback{% endif %}">
-    <label for="inputName" class="col-sm-2 control-label">Name</label>
+    <label for="inputName" class="col-sm-2 control-label">호스트 이름</label>
     <div class="col-sm-10">
       <div class="input-group">
-        {{form.name(class_='form-control', id='inputName', placeholder='Name')}}
+        {{form.name(class_='form-control', id='inputName', placeholder='호스트 이름')}}
         <span class="input-group-addon">.{{ domain.domain }}</span>
       </div>
       {% if form.name.errors %}
@@ -49,11 +49,11 @@
       {% endif %}
     </div>
   </div>
-  {{ form_field(form.ip, 'inputIp', 'IPv6', placeholder='IPv6 Address') }}
-  {{ form_field(form.memo, 'inputMemo', 'Memo', placeholder='Memo') }}
+  {{ form_field(form.ip, 'inputIp', 'IPv6 주소', placeholder='IPv6 주소') }}
+  {{ form_field(form.memo, 'inputMemo', '메모', placeholder='메모') }}
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary">Add A Record</button>
+      <button type="submit" class="btn btn-primary">레코드 추가</button>
     </div>
   </div>
 </form>

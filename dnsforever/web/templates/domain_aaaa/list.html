@@ -1,23 +1,22 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ g.service_name }} - AAAA Record [{{ domain.domain }}]
+{{ g.service_name }} - AAAA 레코드 설정 [{{ domain.domain }}]
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>AAAA Record Setting <small>{{ domain.domain }}</small></h1>
+<h1>AAAA 레코드 설정 <small>{{ domain.domain }}</small></h1>
 
-<h2>AAAA Record</h2>
 <table class="table table-hover">
     <thead>
         <tr>
             <th width="30"></th>
-            <th>Hostname</th>
-            <th>IP Address</th>
-            <th>Memo</th>
+            <th>호스트 이름</th>
+            <th>IP 주소</th>
+            <th>메모</th>
             <th></th>
         </tr>
     </tbody>
@@ -29,8 +28,8 @@
             <th>{{ record.ip }}</th>
             <th>{{ record.memo }}</th>
             <th>
-              <a href="{{ url_for('domain_aaaa.record_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">Edit</a>
-              <a href="{{ url_for('domain_aaaa.record_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">Delete</a>
+              <a href="{{ url_for('domain_aaaa.record_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">수정</a>
+              <a href="{{ url_for('domain_aaaa.record_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">삭제</a>
             </th>
         </tr>
         {% endfor %}
@@ -38,7 +37,7 @@
 </table>
 
 <div class="pull-right">
-    <a href="{{ url_for('domain_aaaa.record_new', domain=domain.domain) }}" class="btn btn-primary">New</a>
+    <a href="{{ url_for('domain_aaaa.record_new', domain=domain.domain) }}" class="btn btn-primary">새 레코드 등록</a>
     <!-- button type="submit" class="btn btn-danger">Delete</button -->
 </div>
 {% endblock %}

@@ -1,31 +1,31 @@
 {% extends "base.html" %}
 
 {% block title %}
-{{ g.service_name }} - Reset Password
+{{ g.service_name }} - 비밀번호 재설정
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>Reset Password</h1>
+<h1>비밀번호 재설정</h1>
 
 <form class="form-horizontal" role="form" method="post">
   <div class="form-group">
-    <label for="inputPassword" class="col-sm-2 control-label">New Password</label>
+    <label for="inputPassword" class="col-sm-2 control-label">새 비밀번호</label>
     <div class="col-sm-10">
-      <input name="password" type="password" class="form-control" id="inputPassword" placeholder="New Password">
+      <input name="password" type="password" class="form-control" id="inputPassword" placeholder="새로운 비밀번호를 입력해 주세요.">
     </div>
   </div>
   <div class="form-group">
-    <label for="inputPasswordRe" class="col-sm-2 control-label">Re-enter Password</label>
+    <label for="inputPasswordRe" class="col-sm-2 control-label">다시 입력</label>
     <div class="col-sm-10">
-      <input type="password" class="form-control" id="inputPasswordRe" placeholder="Re-enter Password">
+      <input type="password" class="form-control" id="inputPasswordRe" placeholder="비밀번호를 다시 입력해주세요.">
     </div>
   </div>
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">Reset password</button>
+      <button type="submit" class="btn btn-default">비밀번호 재설정</button>
     </div>
   </div>
 </form>

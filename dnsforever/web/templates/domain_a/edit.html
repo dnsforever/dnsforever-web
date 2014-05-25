@@ -25,28 +25,28 @@
 {%- endmacro %}
 
 {% block title %}
-{{ g.service_name }} - Domain [{{ domain.domain }}]
+{{ g.service_name }} - A 레코드 수정 [{{ domain.domain }}]
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>New A Record <small>{{ domain.domain }}</small></h1>
+<h1>A 레코드 수정 <small>{{ domain.domain }}</small></h1>
 
 <form id="formSignUp" class="form-horizontal" role="form" method="post">
   <div class="form-group">
-    <label class="col-sm-2 control-label">Name</label>
+    <label class="col-sm-2 control-label">호스트 이름</label>
     <div class="col-sm-10">
       <p class="form-control-static">{{ form.name.data and (form.name.data + '.') or '' }}{{ domain.domain }}</p>
     </div>
   </div>
-  {{ form_field(form.ip, 'inputIp', 'IP', placeholder='IP Address') }}
-  {{ form_field(form.memo, 'inputMemo', 'Memo', placeholder='Memo') }}
-  {{ form_field(form.ddns, 'inputDdns', 'DDNS') }}
+  {{ form_field(form.ip, 'inputIp', 'IP 주소', placeholder='IP 주소') }}
+  {{ form_field(form.memo, 'inputMemo', '메모', placeholder='메모') }}
+  {{ form_field(form.ddns, 'inputDdns', 'DDNS 사용') }}
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-primary">Edit A Record</button>
+      <button type="submit" class="btn btn-primary">레코드 수정</button>
     </div>
   </div>
 </form>

@@ -92,14 +92,13 @@ def record_new_process(domain):
     try:
         txt_record = RecordTXT(domain=domain,
                                txt=form.txt.data)
+        with g.session.begin():
+            g.session.add(txt_record)
     except ValueError as e:
         form.name.errors.append(e)
         return render_template('domain_txt/new.html',
                                domain=domain,
                                form=form)
-
-    with g.session.begin():
-        g.session.add(txt_record)
 
     return redirect(url_for('domain_txt.record_list', domain=domain.domain))
 

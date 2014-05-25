@@ -107,14 +107,13 @@ def record_new_process(domain):
                                    name=form.name.data or None,
                                    target=form.target.data,
                                    memo=form.memo.data)
+        with g.session.begin():
+            g.session.add(cname_record)
     except ValueError as e:
         form.name.errors.append(e)
         return render_template('domain_cname/new.html',
                                domain=domain,
                                form=form)
-
-    with g.session.begin():
-        g.session.add(cname_record)
 
     return redirect(url_for('domain_cname.record_list', domain=domain.domain))
 

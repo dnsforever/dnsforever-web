@@ -98,14 +98,13 @@ def record_new_process(domain):
                            memo=form.memo.data,
                            ddns=form.ddns.data,
                            key=form.ddns.data and random_string(10) or None)
+        with g.session.begin():
+            g.session.add(a_record)
     except ValueError as e:
         form.name.errors.append(e)
         return render_template('domain_a/new.html',
                                domain=domain,
                                form=form)
-
-    with g.session.begin():
-        g.session.add(a_record)
 
     return redirect(url_for('domain_a.record_list', domain=domain.domain))
 

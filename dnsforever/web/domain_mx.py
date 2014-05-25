@@ -98,14 +98,13 @@ def record_new_process(domain):
                              name=form.name.data or None,
                              target=form.target.data,
                              rank=form.rank.data)
+        with g.session.begin():
+            g.session.add(mx_record)
     except ValueError as e:
         form.name.errors.append(e)
         return render_template('domain_mx/new.html',
                                domain=domain,
                                form=form)
-
-    with g.session.begin():
-        g.session.add(mx_record)
 
     return redirect(url_for('domain_mx.record_list', domain=domain.domain))
 

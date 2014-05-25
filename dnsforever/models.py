@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Unicode, Boolean, DateTime
 from sqlalchemy import ForeignKey
+from sqlalchemy.event import listen
 from sqlalchemy.orm import sessionmaker, validates, relationship
 from sqlalchemy.sql import functions
 from sqlalchemy.ext.declarative import declarative_base
@@ -111,15 +112,10 @@ class RecordA(Base):
     # Column for optimise indexing time.
     fullname = Column(String(256), index=True, nullable=False)
 
-    @validates('name')
-    def name_validates(self, key, name):
-        if name is None:
-            self.fullname = self.domain.domain
-        else:
-            self.fullname = '%s.%s' % (name, self.domain.domain)
-
-        check_domain(self.fullname)
-        return name
+    @validates('fullname')
+    def name_validates(self, key, fullname):
+        check_domain(fullname)
+        return fullname
 
 
 class RecordAAAA(Base):
@@ -140,15 +136,10 @@ class RecordAAAA(Base):
     # Column for optimise indexing time.
     fullname = Column(String(256), index=True, nullable=False)
 
-    @validates('name')
-    def name_validates(self, key, name):
-        if name is None:
-            self.fullname = self.domain.domain
-        else:
-            self.fullname = '%s.%s' % (name, self.domain.domain)
-
-        check_domain(self.fullname)
-        return name
+    @validates('fullname')
+    def name_validates(self, key, fullname):
+        check_domain(fullname)
+        return fullname
 
 
 class RecordCNAME(Base):
@@ -169,15 +160,10 @@ class RecordCNAME(Base):
     # Column for optimise indexing time.
     fullname = Column(String(256), index=True, nullable=False)
 
-    @validates('name')
-    def name_validates(self, key, name):
-        if name is None:
-            self.fullname = self.domain.domain
-        else:
-            self.fullname = '%s.%s' % (name, self.domain.domain)
-
-        check_domain(self.fullname)
-        return name
+    @validates('fullname')
+    def name_validates(self, key, fullname):
+        check_domain(fullname)
+        return fullname
 
 
 class RecordMX(Base):
@@ -199,15 +185,10 @@ class RecordMX(Base):
     # Column for optimise indexing time.
     fullname = Column(String(256), index=True, nullable=False)
 
-    @validates('name')
-    def name_validates(self, key, name):
-        if name is None:
-            self.fullname = self.domain.domain
-        else:
-            self.fullname = '%s.%s' % (name, self.domain.domain)
-
-        check_domain(self.fullname)
-        return name
+    @validates('fullname')
+    def name_validates(self, key, fullname):
+        check_domain(fullname)
+        return fullname
 
 
 class RecordTXT(Base):
@@ -228,12 +209,20 @@ class RecordTXT(Base):
     # Column for optimise indexing time.
     fullname = Column(String(256), index=True, nullable=False)
 
-    @validates('name')
-    def name_validates(self, key, name):
-        if name is None:
-            self.fullname = self.domain.domain
-        else:
-            self.fullname = '%s.%s' % (name, self.domain.domain)
+    @validates('fullname')
+    def name_validates(self, key, fullname):
+        check_domain(fullname)
+        return fullname
 
-        check_domain(self.fullname)
-        return name
+
+def record_insert_listener(mapper, connection, target):
+    if target.name is None:
+        target.fullname = target.domain.domain
+    else:
+        target.fullname = '%s.%s' % (target.name, target.domain.domain)
+
+listen(RecordA, 'before_insert', record_insert_listener)
+listen(RecordAAAA, 'before_insert', record_insert_listener)
+listen(RecordCNAME, 'before_insert', record_insert_listener)
+listen(RecordMX, 'before_insert', record_insert_listener)
+listen(RecordTXT, 'before_insert', record_insert_listener)

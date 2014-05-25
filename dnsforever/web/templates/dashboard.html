@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ g.service_name }} - Domain List
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<div class="col-xs-12 col-sm-8">
+    <h1>도메인 목록</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th width="30"></th>
+                <th>도메인</th>
+                <!-- th>Status</th -->
+                <th width="80">A(DDNS)</th>
+                <th width="80">AAAA</th>
+                <th width="80">CNAME</th>
+                <th width="80">MX</th>
+                <th width="80">TXT</th>
+            </tr>
+        </tbody>
+        <tbody>
+            {% for domain in domain_list %}
+            <tr>
+                <td><input type="checkbox"></td>
+                <td><a href="{{ url_for('domain.detail', domain=domain.domain) }}">{{ domain.domain }}</a></td>
+                <!-- th>Good</th -->
+                <th><a href="{{ url_for('domain_a.record_list', domain=domain.domain) }}">{{ domain.count_a or 0 }}({{ domain.count_ddns or 0 }})</a></th>
+                <th><a href="{{ url_for('domain_aaaa.record_list', domain=domain.domain) }}">{{ domain.count_aaaa or 0 }}</a></th>
+                <th><a href="{{ url_for('domain_cname.record_list', domain=domain.domain) }}">{{ domain.count_cname or 0 }}</a></th>
+                <th><a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}">{{ domain.count_mx or 0 }}</a></th>
+                <th><a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}">{{ domain.count_txt or 0 }}</a></th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pull-right">
+        <a href="{{ url_for('domain.new') }}" class="btn btn-primary">New</a>
+        <!-- button type="submit" class="btn btn-danger">Delete</button -->
+    </div>
+</div>
+<div class="col-xs-12 col-sm-4">
+    <h1>네임서버 목록</h1>
+    <dl class="dl-horizontal">
+        <dt>ns1.dnsforever.kr</dt><dd>000.00.000.0</dd>
+        <dt>ns2.dnsforever.kr</dt><dd>000.00.000.0</dd>
+        <dt>ns3.dnsforever.kr</dt><dd>000.00.000.0</dd>
+    </dl>
+</div>
+{% endblock %}
+

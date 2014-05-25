@@ -46,7 +46,7 @@ def index():
                    .outerjoin(count_txt)\
                    .filter(Domain.owner == get_user()).all()
 
-    return render_template('domain.html', domain_list=domain_list)
+    return render_template('dashboard.html', domain_list=domain_list)
 
 
 @app.route('/new', methods=['GET'])

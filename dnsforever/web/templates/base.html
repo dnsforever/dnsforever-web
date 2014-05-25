@@ -27,6 +27,7 @@
           <a class="navbar-brand" href="{{ url_for('index.index') }}">{{ g.service_name }}</a>
         </div>
         <div class="navbar-collapse collapse">
+          {% if g.user %}
           <ul class="nav navbar-nav">
             <li class="active"><a href="{{ url_for('domain.index') }}">Dashboard</a></li>
             <li class="dropdown">
@@ -42,7 +43,6 @@
             </li>
           </ul>
           <a href="{{ url_for('domain.new')}}" class="btn btn-default navbar-btn navbar-left" role="button"><span class="glyphicon glyphicon-plus"></span> Add domain</a>
-          {% if g.user %}
           <div class="navbar-right">
               <p class="navbar-text">Welcome <a href="{{ url_for('account.resetpasswd') }}">{{ g.user.name }}</a></p>
           <a href="{{ url_for('account.signout')}}" class="btn btn-primary navbar-btn" role="button">Signout</a>

@@ -12,5 +12,6 @@ setup(
                       'Werkzeug>=0.7',
                       'Jinja2>=2.4',
                       'SQLAlchemy>=0.9.4',
-                      'Twisted>=14.0.0']
+                      'Twisted>=14.0.0',
+                      'MySQL-python>=1.2.5']
 )

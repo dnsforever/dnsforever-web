@@ -15,7 +15,7 @@ def password_hash(data):
 
 
 class SignupForm(Form):
-    name = TextField('name', [validators.Length(min=4, max=25)])
+    name = TextField('name', [validators.Length(min=1, max=25)])
     email = TextField('email', [validators.Length(min=6, max=127),
                                 validators.Email()])
     password = PasswordField('password', [validators.Required()])

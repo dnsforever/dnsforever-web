@@ -89,4 +89,5 @@ def signout():
 @app.route('/resetpasswd', methods=['GET', 'POST'])
 @login(True, '/')
 def resetpasswd():
-    return render_template('resetpasswd.html')
+    return redirect(url_for('index.index'))
+    #return render_template('resetpasswd.html')

@@ -7,8 +7,9 @@ from sqlalchemy.sql import functions
 from sqlalchemy.ext.declarative import declarative_base
 import re
 
+from dnsforever.config import database_url
 
-engine = create_engine('sqlite:///database.db')
+engine = create_engine(database_url)
 
 Session = sessionmaker(autocommit=True)
 Session.configure(bind=engine)

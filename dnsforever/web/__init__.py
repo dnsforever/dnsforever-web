@@ -1,5 +1,6 @@
 from flask import Flask, g
 
+from dnsforever.config import secret_key
 from dnsforever.models import Session
 from dnsforever.web.tools.session import get_user
 
@@ -11,7 +12,7 @@ blueprints = ['index', 'account', 'domain',
 
 def create_app():
     app = Flask(__name__)
-    app.secret_key = 'SECRET_KEY'
+    app.secret_key = secret_key
 
     for name in blueprints:
         app.register_blueprint(load_blueprint(name))

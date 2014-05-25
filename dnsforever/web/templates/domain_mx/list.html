@@ -26,7 +26,7 @@
             <td><input type="checkbox"></td>
             <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</td>
             <th>{{ record.target }}</th>
-            <th>{{ record.rank }}</th>
+            <th>{{ record.preference }}</th>
             <th>
               <a href="{{ url_for('domain_mx.record_edit', domain=domain.domain, record_id=record.id) }}" class="btn btn-warning btn-xs">수정</a>
               <a href="{{ url_for('domain_mx.record_delete', domain=domain.domain, record_id=record.id) }}" class="btn btn-danger btn-xs">삭제</a>

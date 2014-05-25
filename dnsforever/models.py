@@ -180,7 +180,7 @@ class RecordMX(Base):
     fullname = Column(String(256), nullable=True)
     name = Column(String(256), nullable=True)
     target = Column(String(256), nullable=False)
-    rank = Column(Integer)
+    preference = Column(Integer)
 
     # Column for optimise indexing time.
     fullname = Column(String(256), index=True, nullable=False)

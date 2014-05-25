@@ -20,7 +20,8 @@ def record_list(domain):
 
     records = g.session.query(RecordMX).filter(RecordMX.domain == domain)\
                                        .order_by(RecordMX.name)\
-                                       .order_by(RecordMX.rank.asc()).all()
+                                       .order_by(RecordMX.preference.asc())\
+                                       .all()
 
     if not records:
         return redirect(url_for('domain.detail',
@@ -36,7 +37,7 @@ class RecordMXForm(Form):
                      [Regexp('(^$)|(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
     # TODO: Check max length of name.
     target = TextField('target', [Regexp('(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
-    rank = IntegerField('rank', [NumberRange(0, 99)])
+    preference = IntegerField('preference', [NumberRange(0, 99)])
 
 
 @app.route('/new', methods=['GET'])
@@ -71,7 +72,7 @@ def record_edit(domain, record_id):
 
     form = RecordMXForm(name=record.name,
                         target=record.target,
-                        rank=record.rank)
+                        rank=record.preference)
 
     return render_template('domain_mx/edit.html',
                            domain=domain,
@@ -97,7 +98,7 @@ def record_new_process(domain):
         mx_record = RecordMX(domain=domain,
                              name=form.name.data or None,
                              target=form.target.data,
-                             rank=form.rank.data)
+                             preference=form.preference.data)
         with g.session.begin():
             g.session.add(mx_record)
     except ValueError as e:
@@ -134,7 +135,7 @@ def record_edit_process(domain, record_id):
                                form=form)
 
     record.target = form.target.data
-    record.rank = form.rank.data
+    record.preference = form.preference.data
 
     with g.session.begin():
         g.session.add(record)

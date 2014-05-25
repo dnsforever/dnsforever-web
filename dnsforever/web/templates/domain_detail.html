@@ -103,7 +103,7 @@
             <td><input type="checkbox"></td>
             <td>{{ record.name and (record.name + '.') or '' }}{{ domain.domain }}</th>
             <th>{{ record.target }}</th>
-            <th>{{ record.rank }}</th>
+            <th>{{ record.preference }}</th>
         </tr>
         {% endfor %}
     </tbody>

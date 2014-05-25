@@ -60,7 +60,7 @@ class DatabaseAuthority(ResolverBase):
                                 auth=True)
         elif isinstance(result, models.RecordMX):
             return dns.RRHeader(result.fullname, dns.MX, dns.IN, result.ttl,
-                                dns.Record_MX(result.rank, result.target,
+                                dns.Record_MX(result.preference, result.target,
                                               result.ttl),
                                 auth=True)
         elif isinstance(result, models.RecordTXT):

@@ -71,7 +71,7 @@ class Domain(Base):
 
     id = Column(Integer, primary_key=True)
 
-    domain = Column(String(256), nullable=False, index=True, unique=True)
+    domain = Column(String(255), nullable=False, index=True)
 
     owner_id = Column(Integer, ForeignKey('user.id'), nullable=False,
                       index=True)
@@ -102,7 +102,7 @@ class RecordA(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
-    name = Column(String(256), nullable=True)
+    name = Column(String(255), nullable=True)
     ip = Column(String(16), nullable=False)
     memo = Column(Unicode(1024), default=u'')
 
@@ -110,7 +110,7 @@ class RecordA(Base):
     key = Column(String(10), nullable=True, index=True)
 
     # Column for optimise indexing time.
-    fullname = Column(String(256), index=True, nullable=False)
+    fullname = Column(String(255), index=True, nullable=False)
 
     @validates('fullname')
     def name_validates(self, key, fullname):
@@ -129,12 +129,12 @@ class RecordAAAA(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
-    name = Column(String(256), nullable=True)
+    name = Column(String(255), nullable=True)
     ip = Column(String(40), nullable=False)
     memo = Column(Unicode(1024), default=u'')
 
     # Column for optimise indexing time.
-    fullname = Column(String(256), index=True, nullable=False)
+    fullname = Column(String(255), index=True, nullable=False)
 
     @validates('fullname')
     def name_validates(self, key, fullname):
@@ -153,12 +153,12 @@ class RecordCNAME(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
-    name = Column(String(256), nullable=True)
-    target = Column(String(256), nullable=False)
+    name = Column(String(255), nullable=True)
+    target = Column(String(255), nullable=False)
     memo = Column(Unicode(1024), default=u'')
 
     # Column for optimise indexing time.
-    fullname = Column(String(256), index=True, nullable=False)
+    fullname = Column(String(255), index=True, nullable=False)
 
     @validates('fullname')
     def name_validates(self, key, fullname):
@@ -177,13 +177,13 @@ class RecordMX(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
-    fullname = Column(String(256), nullable=True)
-    name = Column(String(256), nullable=True)
-    target = Column(String(256), nullable=False)
+    fullname = Column(String(255), nullable=True)
+    name = Column(String(255), nullable=True)
+    target = Column(String(255), nullable=False)
     preference = Column(Integer)
 
     # Column for optimise indexing time.
-    fullname = Column(String(256), index=True, nullable=False)
+    fullname = Column(String(255), index=True, nullable=False)
 
     @validates('fullname')
     def name_validates(self, key, fullname):
@@ -202,12 +202,12 @@ class RecordTXT(Base):
 
     ttl = Column(Integer, nullable=False, default=14400)
 
-    fullname = Column(String(256), nullable=True)
-    name = Column(String(256), nullable=True)
-    txt = Column(String(256), nullable=False)
+    fullname = Column(String(255), nullable=True)
+    name = Column(String(255), nullable=True)
+    txt = Column(String(255), nullable=False)
 
     # Column for optimise indexing time.
-    fullname = Column(String(256), index=True, nullable=False)
+    fullname = Column(String(255), index=True, nullable=False)
 
     @validates('fullname')
     def name_validates(self, key, fullname):

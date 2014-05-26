@@ -34,7 +34,7 @@ class RecordTXTForm(Form):
     name = TextField('name',
                      [Regexp('(^$)|(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
     txt = TextField('txt', [Length(max=255),
-                            Regexp('^[a-z0-9\-_\.]+=[a-z0-9\-_=\.]+$')])
+                            Regexp('^[a-z0-9\-_\.]+=[a-zA-Z0-9\-_=\.]+$')])
 
 
 @app.route('/new', methods=['GET'])

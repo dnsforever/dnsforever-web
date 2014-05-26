@@ -2,10 +2,12 @@ from flask import Blueprint, g, render_template, request, url_for, redirect
 from sqlalchemy.sql.expression import true
 from sqlalchemy.sql import func
 
+from dnsforever.domain import ROOT_DOMAIN
 from dnsforever.web.tools.session import login, get_user
 from dnsforever.models import Domain, RecordA, RecordAAAA, RecordCNAME
 from dnsforever.models import RecordMX, RecordTXT
 import re
+import string
 
 DOMAIN_PATTERN = re.compile('^([a-z0-9\-]+\.)+([a-z0-9\-]+)$')
 
@@ -55,6 +57,19 @@ def new():
     return render_template('domain_new.html')
 
 
+def check_domain_owner(domain):
+    if domain in ROOT_DOMAIN:
+        return False
+    domain = domain.split('.')
+    for i in range(len(domain)):
+        sub_domain = domain[i - len(domain):]
+        sub_domain = string.join(sub_domain, '.')
+        if g.session.query(Domain)\
+                    .filter(Domain.domain == sub_domain).count() > 0:
+            return False
+    return True
+
+
 @app.route('/new', methods=['POST'])
 @login(True, '/')
 def new_process():
@@ -73,12 +88,18 @@ def new_process():
 
         if not DOMAIN_PATTERN.match(domain.lower()):
             error_domains.append(domain)
+            continue
+
+        if check_domain_owner(domain) is False:
+            error_domains.append(domain)
+            continue
 
         try:
             with g.session.begin():
                 g.session.add(Domain(domain=domain.lower(), owner=get_user()))
         except:
             error_domains.append(domain)
+            continue
 
     if len(error_domains) > 0:
         return render_template('domain_new.html',

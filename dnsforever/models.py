@@ -9,7 +9,7 @@ import re
 
 from dnsforever.config import database_url
 
-engine = create_engine(database_url)
+engine = create_engine(database_url, pool_recycle=300)
 
 Session = sessionmaker(autocommit=True)
 Session.configure(bind=engine)

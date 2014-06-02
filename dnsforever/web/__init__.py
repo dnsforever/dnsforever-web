@@ -19,7 +19,7 @@ def create_app():
 
     @app.before_request
     def define_session():
-        g.service_name = 'DNS Forever'
+        g.service_name = 'DNS Forever (alpha)'
         g.session = Session()
 
         g.user = get_user()

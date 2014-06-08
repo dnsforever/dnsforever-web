@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ g.service_name }} - 도메인 삭제 [{{ domain.domain }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>도메인 삭제 <small>{{ domain.domain }}</small></h1>
+
+<form role="form" method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">정말 도메인({{ domain.domain }})과 도메인에 등록된 모든 레코드를 삭제하시겠습니까?</h3>
+        </div>
+        <div class="panel-body">
+            <button type="submit" class="btn btn-danger">삭제</button>
+            <a href="{{ url_for('domain.index') }}" class="btn btn-primary">취소</a>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

@@ -22,6 +22,7 @@
                 <th width="80">CNAME</th>
                 <th width="80">MX</th>
                 <th width="80">TXT</th>
+                <th width="40"></th>
             </tr>
         </tbody>
         <tbody>
@@ -35,6 +36,7 @@
                 <th><a href="{{ url_for('domain_cname.record_list', domain=domain.domain) }}">{{ domain.count_cname or 0 }}</a></th>
                 <th><a href="{{ url_for('domain_mx.record_list', domain=domain.domain) }}">{{ domain.count_mx or 0 }}</a></th>
                 <th><a href="{{ url_for('domain_txt.record_list', domain=domain.domain) }}">{{ domain.count_txt or 0 }}</a></th>
+                <th><a href="{{ url_for('domain.domain_delete', domain=domain.domain) }}" class="btn btn-danger btn-xs">삭제</a></th>
             </tr>
             {% endfor %}
         </tbody>

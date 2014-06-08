@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Unicode, Boolean, DateTime
 from sqlalchemy import ForeignKey
 from sqlalchemy.event import listen
-from sqlalchemy.orm import sessionmaker, validates, relationship
+from sqlalchemy.orm import sessionmaker, validates, relationship, backref
 from sqlalchemy.sql import functions
 from sqlalchemy.ext.declarative import declarative_base
 import re
@@ -99,7 +99,7 @@ class RecordA(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(Domain, backref='a')
+    domain = relationship(Domain, backref=backref('a', cascade='delete'))
 
     ttl = Column(Integer, nullable=False, default=14400)
 
@@ -126,7 +126,7 @@ class RecordAAAA(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(Domain, backref='aaaa')
+    domain = relationship(Domain, backref=backref('aaaa', cascade='delete'))
 
     ttl = Column(Integer, nullable=False, default=14400)
 
@@ -150,7 +150,7 @@ class RecordCNAME(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(Domain, backref='cname')
+    domain = relationship(Domain, backref=backref('cname', cascade='delete'))
 
     ttl = Column(Integer, nullable=False, default=14400)
 
@@ -174,7 +174,7 @@ class RecordMX(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(Domain, backref='mx')
+    domain = relationship(Domain, backref=backref('mx', cascade='delete'))
 
     ttl = Column(Integer, nullable=False, default=14400)
 
@@ -199,7 +199,7 @@ class RecordTXT(Base):
 
     domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
                        index=True)
-    domain = relationship(Domain, backref='txt')
+    domain = relationship(Domain, backref=backref('txt', cascade='delete'))
 
     ttl = Column(Integer, nullable=False, default=14400)
 

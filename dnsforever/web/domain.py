@@ -119,3 +119,20 @@ def detail(domain):
         return redirect(url_for('domain.index'))
 
     return render_template('domain_detail.html', domain=domain)
+
+
+@app.route('/<string:domain>/del', methods=['GET', 'POST'])
+@login(True, '/')
+def domain_delete(domain):
+    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
+                                    .filter(Domain.owner == get_user())\
+                                    .first()
+    if not domain:
+        return redirect(url_for('domain.index'))
+
+    if request.method == 'POST':
+        with g.session.begin():
+            g.session.delete(domain)
+        return redirect(url_for('domain.index'))
+
+    return render_template('domain_del.html', domain=domain)

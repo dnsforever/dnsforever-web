@@ -4,9 +4,9 @@ from hashlib import sha256
 
 from dnsforever.config import hash_salt
 from dnsforever.models import User
-from dnsforever.web.tools.session import login, set_user
+from dnsforever.web.tools.session import login, set_user, get_user
 
-app = Blueprint('account', __name__)
+app = Blueprint('account', __name__, url_prefix='/account')
 
 
 def password_hash(data):
@@ -87,8 +87,31 @@ def signout():
     return redirect(url_for('index.index'))
 
 
+class ResetPasswordForm(Form):
+    old_password = PasswordField('old_password', [validators.Required()])
+    new_password = PasswordField('new_password', [validators.Required()])
+
+
 @app.route('/resetpasswd', methods=['GET', 'POST'])
 @login(True, '/')
 def resetpasswd():
+    if request.method == 'GET':
+        return render_template('resetpasswd.html', form=ResetPasswordForm())
+
+    form = ResetPasswordForm(request.form)
+
+    if not form.validate():
+        return render_template('resetpasswd.html', form=form)
+
+    user = get_user()
+
+    if password_hash(form.old_password.data) != user.password:
+        form.old_password.errors.append('Please enter the correct password.')
+        return render_template('resetpasswd.html', form=form)
+
+    user.password = password_hash(form.new_password.data)
+
+    with g.session.begin():
+        g.session.add(user)
+
     return redirect(url_for('index.index'))
-    #return render_template('resetpasswd.html')

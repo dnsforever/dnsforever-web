@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String, Unicode, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Unicode, Boolean, DateTime, \
+    UnicodeText
 from sqlalchemy import ForeignKey
 from sqlalchemy.event import listen
 from sqlalchemy.orm import sessionmaker, validates, relationship, backref
@@ -15,12 +16,6 @@ Session = sessionmaker(autocommit=True)
 Session.configure(bind=engine)
 
 Base = declarative_base()
-
-
-@property
-def _serialize(self):
-    return {}
-Base.serialize = _serialize
 
 
 def check_domain(domain):
@@ -42,11 +37,11 @@ class User(Base):
     name = Column(Unicode(100), nullable=False)
 
     email = Column(Unicode(100), nullable=False, index=True, unique=True)
-    email_validate = Column(Boolean, nullable=False, default=False)
     password = Column(Unicode(100), nullable=True)
 
     created_at = Column(DateTime(timezone=True), nullable=False,
                         default=functions.now())
+    type = Column(Integer, nullable=False, default=2)
 
     @validates('email')
     def email_validates(self, key, email):
@@ -57,12 +52,19 @@ class User(Base):
             return email
         raise ValueError
 
-    @property
-    def serialize(self):
-        """Return object data in easily serializeable format"""
-        return {'id': self.id,
-                'name': self.name,
-                'email': self.email}
+
+class DomainOwnerShip(Base):
+    __tablename__ = 'domain_ownership'
+
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship(User, backref='user.ownership')
+
+    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False)
+    domain = relationship('Domain', backref='ownership')
+
+    permission = Column(UnicodeText, nullable=False)
 
 
 class Domain(Base):
@@ -71,18 +73,16 @@ class Domain(Base):
     DOMAIN_PATTERN = re.compile('^([a-z0-9\-]+\.)+([a-z0-9\-]+)$')
 
     id = Column(Integer, primary_key=True)
-
-    domain = Column(String(255), nullable=False, index=True)
-
-    owner_id = Column(Integer, ForeignKey('user.id'), nullable=False,
-                      index=True)
-    owner = relationship(User, backref='domain')
-
+    name = Column(String(255), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), nullable=False,
                         default=functions.now())
 
+    parent_id = Column(Integer, ForeignKey('domain.id'), nullable=True,
+                       default=None)
+    inheritable = Column(Boolean, nullable=False, default=True)
+
     @validates('domain')
-    def email_validates(self, key, domain):
+    def domain_validates(self, key, domain):
         if not isinstance(domain, str):
             raise ValueError
         if not self.DOMAIN_PATTERN.match(domain):
@@ -92,130 +92,46 @@ class Domain(Base):
         return domain
 
 
-class RecordA(Base):
+class Record(Base):
+    __tablename__ = 'record'
+
+    id = Column(Integer, primary_key=True)
+    service = Column(UnicodeText, nullable=False)
+
+    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False)
+    domain = relationship(Domain, backref='records')
+
+    name = Column(Unicode(255), nullable=True)
+    type = Column(Unicode(32), nullable=False)
+    cls = Column(Integer, nullable=False)
+    ttl = Column(Integer, nullable=False)
+    rdata = Column(Unicode(255), nullable=False)
+
+    __mapper_args__ = {
+        'polymorphic_identity': None,
+        'polymorphic_on': service,
+    }
+
+
+class RecordA(Record):
     __tablename__ = 'record_a'
 
-    id = Column(Integer, primary_key=True)
+    __mapper_args__ = {
+        'polymorphic_identity': 'A',
+    }
 
-    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
-                       index=True)
-    domain = relationship(Domain, backref=backref('a', cascade='delete'))
+    def __init__(self, domain, name, ip, ttl=3600):
+        self.domain = domain
+        self.name = name
+        self.rdata = ip
+        self.ttl = ttl
+        self.cls = 0
+        self.type = u'A'
 
-    ttl = Column(Integer, nullable=False, default=14400)
-
-    name = Column(String(255), nullable=True)
-    ip = Column(String(16), nullable=False)
+    id = Column(Integer, ForeignKey('record.id'), primary_key=True)
     memo = Column(Unicode(1024), default=u'')
 
-    ddns = Column(Boolean, nullable=False, default=False)
-    key = Column(String(10), nullable=True, index=True)
-
-    # Column for optimise indexing time.
-    fullname = Column(String(255), index=True, nullable=False)
-
-    @validates('fullname')
-    def name_validates(self, key, fullname):
-        check_domain(fullname)
-        return fullname
-
-
-class RecordAAAA(Base):
-    __tablename__ = 'record_aaaa'
-
-    id = Column(Integer, primary_key=True)
-
-    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
-                       index=True)
-    domain = relationship(Domain, backref=backref('aaaa', cascade='delete'))
-
-    ttl = Column(Integer, nullable=False, default=14400)
-
-    name = Column(String(255), nullable=True)
-    ip = Column(String(40), nullable=False)
-    memo = Column(Unicode(1024), default=u'')
-
-    # Column for optimise indexing time.
-    fullname = Column(String(255), index=True, nullable=False)
-
-    @validates('fullname')
-    def name_validates(self, key, fullname):
-        check_domain(fullname)
-        return fullname
-
-
-class RecordCNAME(Base):
-    __tablename__ = 'record_cname'
-
-    id = Column(Integer, primary_key=True)
-
-    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
-                       index=True)
-    domain = relationship(Domain, backref=backref('cname', cascade='delete'))
-
-    ttl = Column(Integer, nullable=False, default=14400)
-
-    name = Column(String(255), nullable=True)
-    target = Column(String(255), nullable=False)
-    memo = Column(Unicode(1024), default=u'')
-
-    # Column for optimise indexing time.
-    fullname = Column(String(255), index=True, nullable=False)
-
-    @validates('fullname')
-    def name_validates(self, key, fullname):
-        check_domain(fullname)
-        return fullname
-
-
-class RecordMX(Base):
-    __tablename__ = 'record_mx'
-
-    id = Column(Integer, primary_key=True)
-
-    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
-                       index=True)
-    domain = relationship(Domain, backref=backref('mx', cascade='delete'))
-
-    ttl = Column(Integer, nullable=False, default=14400)
-
-    fullname = Column(String(255), nullable=True)
-    name = Column(String(255), nullable=True)
-    target = Column(String(255), nullable=False)
-    preference = Column(Integer)
-
-    # Column for optimise indexing time.
-    fullname = Column(String(255), index=True, nullable=False)
-
-    @validates('fullname')
-    def name_validates(self, key, fullname):
-        check_domain(fullname)
-        return fullname
-
-
-class RecordTXT(Base):
-    __tablename__ = 'record_txt'
-
-    id = Column(Integer, primary_key=True)
-
-    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False,
-                       index=True)
-    domain = relationship(Domain, backref=backref('txt', cascade='delete'))
-
-    ttl = Column(Integer, nullable=False, default=14400)
-
-    fullname = Column(String(255), nullable=True)
-    name = Column(String(255), nullable=True)
-    txt = Column(String(255), nullable=False)
-
-    # Column for optimise indexing time.
-    fullname = Column(String(255), index=True, nullable=False)
-
-    @validates('fullname')
-    def name_validates(self, key, fullname):
-        check_domain(fullname)
-        return fullname
-
-
+"""
 def record_insert_listener(mapper, connection, target):
     if target.name is None:
         target.fullname = target.domain.domain
@@ -223,7 +139,22 @@ def record_insert_listener(mapper, connection, target):
         target.fullname = '%s.%s' % (target.name, target.domain.domain)
 
 listen(RecordA, 'before_insert', record_insert_listener)
-listen(RecordAAAA, 'before_insert', record_insert_listener)
-listen(RecordCNAME, 'before_insert', record_insert_listener)
-listen(RecordMX, 'before_insert', record_insert_listener)
-listen(RecordTXT, 'before_insert', record_insert_listener)
+"""
+
+Base.metadata.create_all(engine)
+
+session = Session()
+
+domain = Domain(name='test.com')
+with session.begin():
+    session.add(domain)
+
+da = RecordA(domain, u'a', u'1.1.1.1')
+with session.begin():
+    session.add(da)
+
+print da.name
+Base.metadata.drop_all(engine)
+
+
+

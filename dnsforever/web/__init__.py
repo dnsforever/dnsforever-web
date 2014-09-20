@@ -24,7 +24,8 @@ def create_app():
 
         g.user = get_user()
         if g.user:
-            g.domain_list = [domain.domain for domain in g.user.domain]
+            g.domain_list = [ownership.domain.name
+                             for ownership in g.user.ownership]
         else:
             g.domain_list = []
 

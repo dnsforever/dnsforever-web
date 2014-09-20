@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template, request, url_for, redirect
-from wtforms import Form, TextField, BooleanField, validators
+from wtforms import Form, StringField, BooleanField, validators
 from dnsforever.web.tools import random_string
-from dnsforever.web.tools.session import login, get_user
+from dnsforever.web.tools.session import login, get_user, get_domain
 from dnsforever.models import Domain, RecordA
 
 app = Blueprint('domain_a', __name__, url_prefix='/domain/<string:domain>/a')
@@ -10,9 +10,8 @@ app = Blueprint('domain_a', __name__, url_prefix='/domain/<string:domain>/a')
 @app.route('/')
 @login(True, '/')
 def record_list(domain):
-    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
-                                    .filter(Domain.owner == get_user())\
-                                    .first()
+    domain = get_domain(domain)
+
     if not domain:
         return redirect(url_for('domain.index'))
 
@@ -20,7 +19,7 @@ def record_list(domain):
                                       .order_by(RecordA.name).all()
 
     if not records:
-        return redirect(url_for('domain.detail', domain=domain.domain))
+        return redirect(url_for('domain.detail', domain=domain.name))
 
     return render_template('domain_a/list.html',
                            domain=domain,
@@ -28,21 +27,19 @@ def record_list(domain):
 
 
 class RecordAForm(Form):
-    name = TextField('name',
-                     [validators.Regexp('(^$)|'
-                                        '(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
+    name = StringField('name',
+                       [validators.Regexp('(^$)|'
+                                          '(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
     # TODO: Check max length of name.
-    ip = TextField('ip', [validators.IPAddress()])
-    memo = TextField('memo', [validators.Length(max=1000)])
-    ddns = BooleanField('ddns')
+    ip = StringField('ip', [validators.IPAddress()])
+    memo = StringField('memo', [validators.Length(max=1000)])
 
 
 @app.route('/new', methods=['GET'])
 @login(True, '/')
 def record_new(domain):
-    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
-                                    .filter(Domain.owner == get_user())\
-                                    .first()
+    domain = get_domain(domain)
+
     if not domain:
         return redirect(url_for('domain.index'))
 
@@ -56,9 +53,8 @@ def record_new(domain):
 @app.route('/<int:record_id>', methods=['GET'])
 @login(True, '/')
 def record_edit(domain, record_id):
-    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
-                                    .filter(Domain.owner == get_user())\
-                                    .first()
+    domain = get_domain(domain)
+
     if not domain:
         return redirect(url_for('domain.index'))
 
@@ -66,10 +62,9 @@ def record_edit(domain, record_id):
                                      .filter(RecordA.domain == domain)\
                                      .first()
     if not record:
-        return redirect(url_for('domain_a.record_list', domain=domain.domain))
+        return redirect(url_for('domain_a.record_list', domain=domain.name))
 
-    form = RecordAForm(name=record.name, ip=record.ip, memo=record.memo,
-                       ddns=record.ddns)
+    form = RecordAForm(name=record.name, ip=record.ip, memo=record.memo)
 
     return render_template('domain_a/edit.html',
                            domain=domain,
@@ -80,9 +75,8 @@ def record_edit(domain, record_id):
 @login(True, '/')
 def record_new_process(domain):
     form = RecordAForm(request.form)
-    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
-                                    .filter(Domain.owner == get_user())\
-                                    .first()
+    domain = get_domain(domain)
+
     if not domain:
         return redirect(url_for('domain.index'))
 
@@ -95,9 +89,7 @@ def record_new_process(domain):
         a_record = RecordA(domain=domain,
                            name=form.name.data or None,
                            ip=form.ip.data,
-                           memo=form.memo.data,
-                           ddns=form.ddns.data,
-                           key=form.ddns.data and random_string(10) or None)
+                           memo=form.memo.data)
         with g.session.begin():
             g.session.add(a_record)
     except ValueError as e:
@@ -106,16 +98,15 @@ def record_new_process(domain):
                                domain=domain,
                                form=form)
 
-    return redirect(url_for('domain_a.record_list', domain=domain.domain))
+    return redirect(url_for('domain_a.record_list', domain=domain.name))
 
 
 @app.route('/<int:record_id>', methods=['POST'])
 @login(True, '/')
 def record_edit_process(domain, record_id):
     form = RecordAForm(request.form)
-    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
-                                    .filter(Domain.owner == get_user())\
-                                    .first()
+    domain = get_domain(domain)
+
     if not domain:
         return redirect(url_for('domain.index'))
 
@@ -123,7 +114,7 @@ def record_edit_process(domain, record_id):
                                      .filter(RecordA.domain == domain)\
                                      .first()
     if not record:
-        return redirect(url_for('domain_a.record_list', domain=domain.domain))
+        return redirect(url_for('domain_a.record_list', domain=domain.name))
 
     form.name.data = record.name
 
@@ -134,21 +125,18 @@ def record_edit_process(domain, record_id):
 
     record.ip = form.ip.data
     record.memo = form.memo.data
-    record.ddns = form.ddns.data
-    record.key = record.key or form.ddns.data and random_string(10) or None
 
     with g.session.begin():
         g.session.add(record)
 
-    return redirect(url_for('domain_a.record_list', domain=domain.domain))
+    return redirect(url_for('domain_a.record_list', domain=domain.name))
 
 
 @app.route('/<int:record_id>/del', methods=['GET', 'POST'])
 @login(True, '/')
 def record_delete(domain, record_id):
-    domain = g.session.query(Domain).filter(Domain.domain.like(domain))\
-                                    .filter(Domain.owner == get_user())\
-                                    .first()
+    domain = get_domain(domain)
+
     if not domain:
         return redirect(url_for('domain.index'))
 
@@ -156,11 +144,11 @@ def record_delete(domain, record_id):
                                      .filter(RecordA.domain == domain)\
                                      .first()
     if not record:
-        return redirect(url_for('domain_a.record_list', domain=domain.domain))
+        return redirect(url_for('domain_a.record_list', domain=domain.name))
 
     if request.method == 'POST':
         with g.session.begin():
             g.session.delete(record)
-        return redirect(url_for('domain_a.record_list', domain=domain.domain))
+        return redirect(url_for('domain_a.record_list', domain=domain.name))
 
     return render_template('domain_a/del.html', domain=domain, record=record)

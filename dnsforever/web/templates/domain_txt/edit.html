@@ -25,20 +25,20 @@
 {%- endmacro %}
 
 {% block title %}
-{{ g.service_name }} - TXT 레코드 수정 [{{ domain.domain }}]
+{{ g.service_name }} - TXT 레코드 수정 [{{ domain.name }}]
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>TXT 레코드 수정 <small>{{ domain.domain }}</small></h1>
+<h1>TXT 레코드 수정 <small>{{ domain.name }}</small></h1>
 
 <form id="formSignUp" class="form-horizontal" role="form" method="post">
   <div class="form-group">
     <label class="col-sm-2 control-label">호스트 이름</label>
     <div class="col-sm-10">
-      <p class="form-control-static">{{ form.name.data and (form.name.data + '.') or '' }}{{ domain.domain }}</p>
+      <p class="form-control-static">{{ form.name.data and (form.name.data + '.') or '' }}{{ domain.name }}</p>
     </div>
   </div>
   {{ form_field(form.txt, 'inputTxt', 'TXT', placeholder='TXT') }}

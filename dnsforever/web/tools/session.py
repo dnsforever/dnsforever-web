@@ -1,7 +1,7 @@
 from flask import session, redirect, g
 from functools import wraps
 
-from dnsforever.models import User
+from dnsforever.models import User, Domain, DomainOwnership
 
 
 def set_user(user):
@@ -38,3 +38,16 @@ def login(state=True, redirect_url='/'):
                 return redirect(redirect_url)
         return wrapper
     return dco_func
+
+
+def get_domain(domain, master=False):
+    if not get_user():
+        return None
+
+    query = g.session.query(Domain)
+    query = query.filter(Domain.name.like(domain))
+    query = query.filter(DomainOwnership.user == get_user())
+    if master:
+        query = query.filter(DomainOwnership.master is True)
+
+    return query.first()

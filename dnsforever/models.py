@@ -145,15 +145,17 @@ class RecordA(Record):
         'polymorphic_identity': 'A',
     }
 
-    def __init__(self, domain, name, ip, ttl=3600):
+    def __init__(self, domain, name, ip, memo=u'', ttl=3600):
         self.domain = domain
         self.name = name
         self.rdata = ip
         self.ttl = ttl
         self.cls = 0
         self.type = u'A'
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
+    domain = relationship(Domain, backref='a')
     memo = Column(UnicodeText, default=u'')
 
     @property
@@ -172,15 +174,17 @@ class RecordAAAA(Record):
         'polymorphic_identity': 'AAAA',
     }
 
-    def __init__(self, domain, name, ip, ttl=3600):
+    def __init__(self, domain, name, ip, memo=u'', ttl=3600):
         self.domain = domain
         self.name = name
         self.rdata = ip
         self.ttl = ttl
         self.cls = 0
         self.type = u'AAAA'
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
+    domain = relationship(Domain, backref='aaaa')
     memo = Column(UnicodeText, default=u'')
 
     @property
@@ -199,15 +203,17 @@ class RecordCNAME(Record):
         'polymorphic_identity': 'CNAME',
     }
 
-    def __init__(self, domain, name, target, ttl=3600):
+    def __init__(self, domain, name, target, memo=u'', ttl=3600):
         self.domain = domain
         self.name = name
         self.rdata = target
         self.ttl = ttl
         self.cls = 0
         self.type = u'CNAME'
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
+    domain = relationship(Domain, backref='cname')
     memo = Column(UnicodeText, default=u'')
 
     @property
@@ -226,7 +232,7 @@ class RecordMX(Record):
         'polymorphic_identity': 'MX',
     }
 
-    def __init__(self, domain, name, preference, target, ttl=3600):
+    def __init__(self, domain, name, preference, target, memo=u'', ttl=3600):
         self.domain = domain
         self.name = name
         self.preference = preference
@@ -234,8 +240,10 @@ class RecordMX(Record):
         self.ttl = ttl
         self.cls = 0
         self.type = u'MX'
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
+    domain = relationship(Domain, backref='mx')
     memo = Column(UnicodeText, default=u'')
 
     @property
@@ -275,15 +283,17 @@ class RecordTXT(Record):
         'polymorphic_identity': 'TXT',
     }
 
-    def __init__(self, domain, name, txt, ttl=3600):
+    def __init__(self, domain, name, txt, memo=u'', ttl=3600):
         self.domain = domain
         self.name = name
         self.txt = txt
         self.ttl = ttl
         self.cls = 0
         self.type = u'TXT'
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
+    domain = relationship(Domain, backref='txt')
     memo = Column(UnicodeText, default=u'')
 
     @property
@@ -302,15 +312,17 @@ class RecordNS(Record):
         'polymorphic_identity': 'NS',
     }
 
-    def __init__(self, domain, name, target, ttl=3600):
+    def __init__(self, domain, name, target, memo=u'', ttl=3600):
         self.domain = domain
         self.name = name
         self.rdata = target
         self.ttl = ttl
         self.cls = 0
         self.type = u'NS'
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
+    domain = relationship(Domain, backref='ns')
     memo = Column(UnicodeText, default=u'')
 
     @property
@@ -432,6 +444,14 @@ engine = create_engine(database_url, pool_recycle=300)
 
 Session = sessionmaker(autocommit=True)
 Session.configure(bind=engine)
+
+
+def db_install():
+    Base.metadata.create_all(engine)
+
+
+def db_uninstall():
+    Base.metadata.drop_all(engine)
 
 
 class UserTestCase(unittest.TestCase):

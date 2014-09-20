@@ -1,18 +1,11 @@
 from flask import Blueprint, g, render_template, redirect, url_for, request
 from wtforms import Form, TextField, PasswordField, validators, ValidationError
-from hashlib import sha256
 
-from dnsforever.config import hash_salt
 from dnsforever.models import User
 from dnsforever.web.tools.session import login, set_user, get_user
+from dnsforever.web.tools import password_hash
 
 app = Blueprint('account', __name__, url_prefix='/account')
-
-
-def password_hash(data):
-    for i in xrange(9999):
-        data = sha256(data + hash_salt).digest()
-    return sha256(data + hash_salt).hexdigest()
 
 
 class SignupForm(Form):

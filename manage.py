@@ -2,19 +2,15 @@
 from flask.ext.script import Manager
 from dnsforever import web
 from dnsforever.models import Base, engine
+from dnsforever.web.tools import password_hash
 
 app = web.create_app()
 manager = Manager(app)
 
 
 @manager.command
-def run():
-    app.run(debug=True, use_reloader=True)
-
-
-@manager.command
-def run_public(port=7000):
-    app.run(debug=True, use_reloader=True, host='0.0.0.0', port=int(port))
+def run(host='127.0.0.1', port=5000):
+    app.run(debug=True, use_reloader=True, host=host, port=port)
 
 
 @manager.command

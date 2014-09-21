@@ -74,6 +74,9 @@ class Domain(Base):
     name = Column(String(255), nullable=False, index=True)
     created_at = Column(DateTime(timezone=True), nullable=False,
                         default=functions.now())
+    updated_at = Column(DateTime(timezone=True), nullable=False,
+                        default=functions.now())
+    update_serial = Column(Integer, nullable=False, default=1)
 
     parent_id = Column(Integer, ForeignKey('domain.id'), nullable=True,
                        default=None)
@@ -90,6 +93,10 @@ class Domain(Base):
 
         check_domain(domain)
         return domain
+
+    def update(self):
+        self.updated_at = functions.now()
+        self.update_serial = self.update_serial + 1
 
 
 class DomainOwnership(Base):

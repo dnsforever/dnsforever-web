@@ -4,13 +4,14 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 
-from flask import g
+from flask import g, url_for
 from jinja2 import Environment, FileSystemLoader
 
 from dnsforever.models import EmailValidation
 
 email_env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) +
                                                 '/templates'))
+email_env.globals={'g': g, 'url_for': url_for}
 
 __all__ = ['email_validation']
 

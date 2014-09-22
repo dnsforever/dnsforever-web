@@ -2,7 +2,7 @@
 
 이메일 인증을 하시려면 다음 링크를 클릭해 주시기 바랍니다.
 
-http://dnsforever.kr/account/validation/{{ token }}
+{{ url_for('account.validation', token=token, _external=True) }}
 
 만약, DNS Forever에 가입하신적이 없다면 위릐 링크를 클릭하지 말고 무시하시기 바랍니다.
 

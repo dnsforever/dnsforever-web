@@ -55,14 +55,22 @@ class User(Base):
         raise ValueError
 
 
-class Token(Base):
-    __tablename__ = 'token'
+class EmailValidation(Base):
+    __tablename__ = 'email_validation'
+
+    def __init__(self, user):
+        self.user = user
+        self.token = random_string()
 
     id = Column(Integer, primary_key=True)
 
-    type = Column(Unicode(127), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship(User)
+
+    created_at = Column(DateTime(timezone=True), nullable=False,
+                        default=functions.now())
+
     token = Column(Unicode(127), nullable=False)
-    data = Column(UnicodeText, nullable=False)
 
 
 class Domain(Base):

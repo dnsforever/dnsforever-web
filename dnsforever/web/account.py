@@ -1,9 +1,10 @@
 from flask import Blueprint, g, render_template, redirect, url_for, request
 from wtforms import Form, TextField, PasswordField, validators, ValidationError
 
-from dnsforever.models import User
+from dnsforever.models import User, EmailValidation
 from dnsforever.web.tools.session import login, set_user, get_user
 from dnsforever.web.tools import password_hash
+from dnsforever.web.email import email_validation
 
 app = Blueprint('account', __name__, url_prefix='/account')
 
@@ -39,7 +40,11 @@ def signup_process():
                 password=password_hash(form.password.data))
     with g.session.begin():
         g.session.add(user)
-    return redirect(url_for('account.signin'))
+
+    email_validation(user)
+
+    # TODO: redirect to email validation
+    return redirect(url_for('index.index'))
 
 
 class SigninForm(Form):
@@ -68,6 +73,9 @@ def signin_process():
         return render_template('signin.html', form=form)
 
     user = g.session.query(User).filter(User.email == form.email.data).first()
+    if user.type == 2:
+        return redirect(url_for('index.index'))
+
     set_user(user)
 
     return redirect(url_for('index.index'))
@@ -107,4 +115,29 @@ def resetpasswd():
     with g.session.begin():
         g.session.add(user)
 
+    return redirect(url_for('index.index'))
+
+
+@app.route('/validation/<string:token>', methods=['GET'])
+def validation(token):
+    ev = g.session.query(EmailValidation)\
+                                .filter(EmailValidation.token.like(token))\
+                                .first()
+
+    if not ev:
+        return redirect(url_for('index.index'))
+
+    user = ev.user
+    user.type = 1
+
+    evs = g.session.query(EmailValidation)\
+                                 .filter(EmailValidation.user == user)\
+                                 .all()
+
+    with g.session.begin():
+        g.session.add(user)
+        for ev in evs:
+            g.session.delete(ev)
+
+    set_user(user)
     return redirect(url_for('index.index'))

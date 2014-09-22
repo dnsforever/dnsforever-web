@@ -16,6 +16,10 @@ __all__ = ['email_validation']
 
 
 def send_text_email(to, subject, body):
+    if g.debug:
+        print body
+        return
+
     msg = MIMEText(body)
     msg['Subject'] = subject
     msg['From'] = 'noreply@dnsforever.kr'

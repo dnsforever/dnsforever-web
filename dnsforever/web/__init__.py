@@ -29,6 +29,8 @@ def create_app():
         else:
             g.domain_list = []
 
+        g.debug = app.debug
+
     return app
 
 

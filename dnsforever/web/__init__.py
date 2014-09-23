@@ -6,7 +6,8 @@ from dnsforever.web.tools.session import get_user
 
 
 blueprints = ['apis', 'index', 'account', 'domain',
-              'domain_a', 'domain_aaaa', 'domain_cname', 'domain_mx',
+              'domain_a', 'domain_ddns', 'domain_aaaa',
+              'domain_cname', 'domain_mx',
               'domain_txt']
 
 

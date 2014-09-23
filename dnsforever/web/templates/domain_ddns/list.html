@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ g.service_name }} - DDNS 설정 [{{ domain.name }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>DDNS 설정 <small>{{ domain.name }}</small></h1>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>호스트 이름</th>
+            <th>IP 주소</th>
+            <th>Key</th>
+            <th>메모</th>
+            <th></th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for record in records %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ record.name and (record.name + '.') or '' }}{{ domain.name }}</td>
+            <th>{{ record.ip }}</th>
+            <th>{{ record.ddns_key }}</th>
+            <th>{{ record.memo }}</th>
+            <th>
+              <a href="{{ url_for('domain_ddns.record_edit', domain=domain.name, record_id=record.id) }}" class="btn btn-warning btn-xs">수정</a>
+              <a href="{{ url_for('domain_ddns.record_delete', domain=domain.name, record_id=record.id) }}" class="btn btn-danger btn-xs">삭제</a>
+            </th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pull-right">
+    <a href="{{ url_for('domain_ddns.record_new', domain=domain.name) }}" class="btn btn-primary">새 레코드 등록</a>
+    <!--button type="submit" class="btn btn-danger">Delete</button-->
+</div>
+{% endblock %}
+

@@ -139,7 +139,7 @@
 <div>
     <p>
         <a href="{{ url_for('domain_a.record_new', domain=domain.name) }}" class="btn btn-lg btn-primary">A 레코드</a>
-        <a href="{{ '#' or url_for('domain_ddns.record_new', domain=domain.name) }}" class="btn btn-lg btn-primary">DDNS</a>
+        <a href="{{ url_for('domain_ddns.record_new', domain=domain.name) }}" class="btn btn-lg btn-primary">DDNS</a>
     </p>
     <p>
         <a href="{{ url_for('domain_aaaa.record_new', domain=domain.name) }}" class="btn btn-lg btn-success">AAAA 레코드</a>

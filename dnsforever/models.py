@@ -377,7 +377,7 @@ class RecordDDNS_A(Record):
         'polymorphic_identity': 'ddns_a',
     }
 
-    def __init__(self, domain, name, ip, ttl=300):
+    def __init__(self, domain, name, ip, memo, ttl=300):
         self.domain = domain
         self.name = name
         self.rdata = ip
@@ -385,6 +385,7 @@ class RecordDDNS_A(Record):
         self.cls = 0
         self.type = u'A'
         self.ddns_key = random_string(10)
+        self.memo = memo
 
     id = Column(Integer, ForeignKey('record.id'), primary_key=True)
     ddns_key = Column(Unicode(80), nullable=False)

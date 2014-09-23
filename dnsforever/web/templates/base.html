@@ -84,7 +84,7 @@
                 </li>
 {%- endmacro %}
                 {{ nav_service ('A 레코드', url_for('domain_a.record_list', domain=domain.name)) }}
-                {{ nav_service ('DDNS', '#' or url_for('domain_ddns.record_list', domain=domain.name)) }}
+                {{ nav_service ('DDNS', url_for('domain_ddns.record_list', domain=domain.name)) }}
                 {{ nav_service ('AAAA 레코드', url_for('domain_aaaa.record_list', domain=domain.name)) }}
                 {{ nav_service ('CNAME 레코드', url_for('domain_cname.record_list', domain=domain.name)) }}
                 {{ nav_service ('Web Forwarding', '#' or url_for('domain_webforwarding.record_list', domain=domain.name)) }}

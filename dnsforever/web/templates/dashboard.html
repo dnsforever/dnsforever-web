@@ -41,8 +41,9 @@
 <div class="col-xs-12 col-sm-4">
     <h1>네임서버 목록</h1>
     <dl class="dl-horizontal">
-        <dt>ns1.dnsforever.kr</dt><dd>1.234.65.231</dd>
-        <dt>ns2.dnsforever.kr</dt><dd>175.126.167.135</dd>
+        {% for ns in ns_list %}
+        <dt>{{ ns.domain }}</dt><dd>{{ ns.ip }}</dd>
+        {% endfor %}
     </dl>
 </div>
 {% endblock %}

@@ -2,7 +2,7 @@ from flask import Blueprint, g, render_template, request, url_for, redirect
 
 from dnsforever.domain import ROOT_DOMAIN
 from dnsforever.web.tools.session import login, get_user, get_domain
-from dnsforever.models import Domain, DomainOwnership
+from dnsforever.models import Domain, DomainOwnership, NameServer
 import re
 import string
 
@@ -14,7 +14,9 @@ app = Blueprint('domain', __name__, url_prefix='/domain')
 @app.route('/')
 @login(True, '/')
 def index():
-    return render_template('dashboard.html', ownership_list=g.user.ownership)
+    ns_list = g.session.query(NameServer).all()
+    return render_template('dashboard.html', ownership_list=g.user.ownership,
+                           ns_list=ns_list)
 
 
 @app.route('/new', methods=['GET'])

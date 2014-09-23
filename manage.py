@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask.ext.script import Manager
 from dnsforever import web
-from dnsforever.models import Base, engine
+from dnsforever.models import Base, engine, Session, NameServer
 from dnsforever.web.tools import password_hash
 
 app = web.create_app()
@@ -16,6 +16,10 @@ def run(host='127.0.0.1', port=5000):
 @manager.command
 def initdb():
     Base.metadata.create_all(engine)
+    session = Session()
+    with session.begin():
+        session.add(NameServer(domain='ns1.dnsforever.kr', ip='1.234.65.231'))
+        session.add(NameServer(domain='ns2.dnsforever.kr', ip='175.126.167.135'))
 
 
 @manager.command

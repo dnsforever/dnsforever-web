@@ -129,7 +129,6 @@ class NameServer(Base):
 
     domain = Column(String(255), nullable=False)
     ip = Column(String(64), nullable=False)
-    status = Column(Unicode(32), nullable=False)
 
 
 class Record(Base):

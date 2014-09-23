@@ -63,7 +63,8 @@ def new_process():
         try:
             with g.session.begin():
                 domain = Domain(name=domain.lower())
-                ownership = DomainOwnership(user=get_user(),
+                ownership = DomainOwnership(master=True,
+                                            user=get_user(),
                                             domain=domain)
                 g.session.add(ownership)
         except:

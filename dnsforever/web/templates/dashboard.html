@@ -23,7 +23,10 @@
             {% for o in ownership_list %}
             <tr>
                 <td><input type="checkbox"></td>
-                <td><a href="{{ url_for('domain.detail', domain=o.domain.name) }}">{{ o.domain.name }}</a></td>
+                <td>
+                    <a href="{{ url_for('domain.detail', domain=o.domain.name) }}">{{ o.domain.name }}</a>
+                    {% if o.master %}<!--i class="fa fa-star"></i-->{% else %}<i class="fa fa-share-alt"></i>{% endif %}
+                </td>
                 <th><a href="{{ url_for('domain.domain_delete', domain=o.domain.name) }}" class="btn btn-danger btn-xs">삭제</a></th>
             </tr>
             {% endfor %}

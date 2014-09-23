@@ -21,8 +21,7 @@ def record_list(domain):
                                         .order_by(RecordTXT.name).all()
 
     if not records:
-        return redirect(url_for('domain.detail',
-                                domain=domain.name))
+        return redirect(url_for('domain_txt.record_new', domain=domain.name))
 
     return render_template('domain_txt/list.html',
                            domain=domain,

@@ -23,8 +23,7 @@ def record_list(domain):
     records = sorted(records, key=lambda record: record.preference)
 
     if not records:
-        return redirect(url_for('domain.detail',
-                                domain=domain.name))
+        return redirect(url_for('domain_mx.record_new', domain=domain.name))
 
     return render_template('domain_mx/list.html',
                            domain=domain,

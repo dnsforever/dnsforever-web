@@ -6,7 +6,9 @@
 
     <title>{% block title %}{{ g.service_name }}{% endblock %}</title>
 
-    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/sb-admin.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='font-awesome-4.1.0/css/font-awesome.min.css') }}" rel="stylesheet">
     <!--[if lt IE 9]>
         <script src="{{ url_for('static', filename='js/html5shiv.js') }}"></script>
         <script src="{{ url_for('static', filename='js/respond.min.js') }}"></script>
@@ -16,12 +18,21 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     {%- block head -%}
     {%- endblock -%}
+    <style>
+        body {
+            background-color: #fff;
+        }
+        .side-nav {
+            margin-bottom: -99999px;
+            padding-bottom: 99999px !important;
+        }
+    </style>
   </head>
   <body>
-    <div class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
+    <div id="wrapper">
+      <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
@@ -61,12 +72,40 @@
           </form>
           {% endif %}
         </div>
-      </div>
-    </div>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
+          <ul class="nav navbar-nav side-nav">
+{% if domain %}
+            <li>
+              <a href="{{ url_for('domain.detail', domain=domain.name) }}" ><i class="fa fa-fw fa-file"></i> {{ domain.name }} </a>
+              <ul id="naver" class="collapse.in">
+{% macro nav_service(name, link) -%}
+                <li{% if False %} class="active"{% endif %}>
+                  <a href="{{ link }}">{{ name }}</a>
+                </li>
+{%- endmacro %}
+                {{ nav_service ('A 레코드', url_for('domain_a.record_list', domain=domain.name)) }}
+                {{ nav_service ('DDNS', '#' or url_for('domain_ddns.record_list', domain=domain.name)) }}
+                {{ nav_service ('AAAA 레코드', url_for('domain_aaaa.record_list', domain=domain.name)) }}
+                {{ nav_service ('CNAME 레코드', url_for('domain_cname.record_list', domain=domain.name)) }}
+                {{ nav_service ('Web Forwarding', '#' or url_for('domain_webforwarding.record_list', domain=domain.name)) }}
+                {{ nav_service ('Web Parking', '#' or url_for('domain_webparking.record_list', domain=domain.name)) }}
+                {{ nav_service ('MX 레코드', url_for('domain_mx.record_list', domain=domain.name)) }}
+                {{ nav_service ('TXT 레코드', url_for('domain_txt.record_list', domain=domain.name)) }}
+                {{ nav_service ('SOA 레코드', '#' or url_for('domain_soa.record_list', domain=domain.name)) }}
+              </ul>
+            </li>
+{% endif %}
+          </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+      </nav>
 
-    <div class="container">
-        {%- block body -%}
-        {%- endblock -%}
+      <div id="page-wrapper">
+        <div class="container">
+            {%- block body -%}
+            {%- endblock -%}
+        </div>
+      </div>
     </div>
 
     <script src="{{ url_for('static', filename='js/jquery-2.1.0.min.js') }}"></script>

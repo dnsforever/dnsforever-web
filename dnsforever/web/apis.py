@@ -1,4 +1,5 @@
 import string
+import re
 
 from flask import Blueprint, g, request
 from flask.ext import restful
@@ -58,10 +59,13 @@ class DdnsUpdate(restful.Resource):
         if host != args['host']:
             return 'ERROR', 404
 
-        if 'ip' in args:
+        if 'ip' in args and args['ip']:
             record.ip = args['ip']
         else:
             record.ip = request.remote_addr
+
+        if not re.match(r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', record.ip):
+            return 'ERROR', 404
 
         with g.session.begin():
             g.session.add(record)

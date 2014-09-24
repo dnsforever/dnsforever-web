@@ -15,7 +15,7 @@ class ServerUpdate(restful.Resource):
     def get(self):
         ns = g.session.query(NameServer)\
                       .filter(NameServer.ip == request.remote_addr).first()
-        if not ns:
+        if not ns and not g.debug:
             return 'ERROR', 403
 
         domains = g.session.query(Domain).all()

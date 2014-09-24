@@ -10,7 +10,7 @@ manager = Manager(app)
 
 @manager.command
 def run(host='127.0.0.1', port=5000):
-    app.run(debug=True, use_reloader=True, host=host, port=port)
+    app.run(debug=True, use_reloader=True, host=host, port=int(port))
 
 
 @manager.command

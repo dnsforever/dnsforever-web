@@ -5,7 +5,7 @@ from flask import Blueprint, g, request
 from flask.ext import restful
 from flask.ext.restful import reqparse
 
-from dnsforever.models import Domain, Record, RecordDDNS_A
+from dnsforever.models import Domain, Record, RecordDDNS_A, NameServer
 
 app = Blueprint('apis', __name__, url_prefix='/apis')
 api = restful.Api(app)
@@ -13,6 +13,11 @@ api = restful.Api(app)
 
 class ServerUpdate(restful.Resource):
     def get(self):
+        ns = g.session.query(NameServer)\
+                      .filter(NameServer.ip == request.remote_addr).first()
+        if not ns:
+            return 'ERROR', 403
+
         domains = g.session.query(Domain).all()
 
         result = {}
@@ -21,7 +26,8 @@ class ServerUpdate(restful.Resource):
             records = g.session.query(Record)\
                                .filter(Record.domain == domain)\
                                .all()
-            zone = [string.join([record.name or '@', record.type, record.rdata], ' ')
+            zone = [string.join([record.name or '@',
+                                 record.type, record.rdata], ' ')
                     for record in records]
 
             soa_record = '@ SOA ns1.dnsforever.kr. root.%s. '\

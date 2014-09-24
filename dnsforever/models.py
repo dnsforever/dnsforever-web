@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String, Unicode, Boolean, DateTime, \
     UnicodeText
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import sessionmaker, validates, relationship, backref
+from sqlalchemy.orm import sessionmaker, validates, relationship
 from sqlalchemy.sql import functions
 from sqlalchemy.ext.declarative import declarative_base
 import re
@@ -150,6 +150,9 @@ class Record(Base):
         'polymorphic_identity': None,
         'polymorphic_on': service,
     }
+
+    def update(self):
+        self.domain.update()
 
 
 class RecordA(Record):

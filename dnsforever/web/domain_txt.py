@@ -88,6 +88,7 @@ def record_new_process(domain):
         txt_record = RecordTXT(domain=domain,
                                txt=form.txt.data)
         with g.session.begin():
+            txt_record.update()
             g.session.add(txt_record)
     except ValueError as e:
         form.name.errors.append(e)
@@ -124,6 +125,7 @@ def record_edit_process(domain, record_id):
     record.txt = form.txt.data
 
     with g.session.begin():
+        record.update()
         g.session.add(record)
 
     return redirect(url_for('domain_txt.record_list', domain=domain.name))
@@ -146,6 +148,8 @@ def record_delete(domain, record_id):
 
     if request.method == 'POST':
         with g.session.begin():
+            record.domain.update()
+            g.session.add(record.domain)
             g.session.delete(record)
         return redirect(url_for('domain_txt.record_list',
                                 domain=domain.name))

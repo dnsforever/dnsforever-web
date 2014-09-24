@@ -91,6 +91,7 @@ def record_new_process(domain):
                                  ip=form.ip.data,
                                  memo=form.memo.data)
         with g.session.begin():
+            aaaa_record.update()
             g.session.add(aaaa_record)
     except ValueError as e:
         form.name.errors.append(e)
@@ -128,6 +129,7 @@ def record_edit_process(domain, record_id):
     record.memo = form.memo.data
 
     with g.session.begin():
+        record.update()
         g.session.add(record)
 
     return redirect(url_for('domain_aaaa.record_list', domain=domain.name))
@@ -151,6 +153,8 @@ def record_delete(domain, record_id):
 
     if request.method == 'POST':
         with g.session.begin():
+            record.domain.update()
+            g.session.add(record.domain)
             g.session.delete(record)
         return redirect(url_for('domain_aaaa.record_list',
                                 domain=domain.name))

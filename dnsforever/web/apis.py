@@ -74,6 +74,7 @@ class DdnsUpdate(restful.Resource):
             return 'ERROR', 404
 
         with g.session.begin():
+            record.update()
             g.session.add(record)
 
         return 'OK'

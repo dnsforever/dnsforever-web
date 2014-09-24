@@ -9,6 +9,7 @@
 
 {% block body %}
 <h1>DDNS 설정 <small>{{ domain.name }}</small></h1>
+<p>DDNS(Dynamic DNS)는 자동으로 네임 서버를 갱신해 주는 방법으로, 유동IP를 사용하는 환경에서도 도매인을 사용할 수 있습니다. </p>
 
 <table class="table table-hover">
     <thead>
@@ -40,7 +41,25 @@
 
 <div class="pull-right">
     <a href="{{ url_for('domain_ddns.record_new', domain=domain.name) }}" class="btn btn-primary">새 레코드 등록</a>
-    <!--button type="submit" class="btn btn-danger">Delete</button-->
+    <button type="submit" class="btn btn-danger">Delete</button>
+</div>
+<br>
+<br>
+
+<h3>DDNS 사용방법(리눅스)</h3>
+
+<p>DDNS에 등록된 주소의 IP를 갱신 하시려면, 다음 명령을 실행하시면 됩니다. 이 작업을 자동화 하려면 cron또는 rc스크립트를 이용하시면 편리합니다.</p>
+<div class="highlight">
+<pre><code>curl {{ url_for('index.index', _external=True) }}apis/ddns?key=<b>{ddns_key}</b>&host=<b>{hostname}</b>&ip=<b>{server_ip}</b> &gt; /dev/null
+</code></pre>
+<p>만약 직접 IP주소를 지정해 주시려면 다음과 같이 해주시면 됩니다.</p>
+<div class="highlight">
+<pre><code>curl {{ url_for('index.index', _external=True) }}apis/ddns?key=<b>{ddns_key}</b>&host=<b>{hostname}</b>&ip=<b>{server_ip}</b> &gt; /dev/null
+</code></pre>
+<p>예를들어, <b>dnsforever.kr</b>의 IP주소를 갱신하고 싶고 key가 <b>abcdefghi</b>라면, 다음과 같은 명령을 사용하시면 됩니다.</p>
+<div class="highlight">
+<pre><code>curl {{ url_for('index.index', _external=True) }}apis/ddns?key=<b>abcdefghijk</b>&host=<b>dnsforever.kr</b> > /dev/null
+</code></pre>
 </div>
 {% endblock %}
 

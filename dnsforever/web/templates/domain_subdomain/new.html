@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% macro form_field(field, id, label=None) -%}
+<div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+    {% if label -%}
+    <label for="{{ id }}" class="col-sm-2 control-label">{{ label }}</label>
+    {% endif -%}
+    <div class="col-sm-10">
+      {% if field.type == 'BooleanField' %}
+      <div class="checkbox">
+        <label>
+          {{ field(id=id, **kwargs) }}
+        </label>
+      </div>
+      {% else %}
+      {{ field(class_='form-control', id=id, **kwargs) }}
+      {% if field.errors %}
+      <span class="glyphicon glyphicon-remove form-control-feedback"></span>
+      {% for error in field.errors %}
+      <span class="help-inline">{{ error }}</span>
+      {% endfor %}
+      {% endif %}
+      {% endif %}
+    </div>
+  </div>
+{%- endmacro %}
+
+{% block title %}
+{{ g.service_name }} - 서브도메인 공유 [{{ domain.name }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>서브도메인 공유 <small>{{ domain.name }}</small></h1>
+
+<form id="formSignUp" class="form-horizontal" role="form" method="post">
+  <div class="form-group{% if form.name.errors %} has-error has-feedback{% endif %}">
+    <label for="inputName" class="col-sm-2 control-label">호스트 이름</label>
+    <div class="col-sm-10">
+      <div class="input-group">
+        {{form.name(class_='form-control', id='inputName', placeholder='호스트 이름')}}
+        <span class="input-group-addon">.{{ domain.name }}</span>
+      </div>
+      {% if form.name.errors %}
+      {% for error in form.name.errors %}
+      <span class="help-inline">{{ error }}</span>
+      {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  {{ form_field(form.email, 'inputEmail', '이메일', placeholder='이메일') }}
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">새로운 서브도매인 공유</button>
+    </div>
+  </div>
+</form>
+
+{% endblock %}
+

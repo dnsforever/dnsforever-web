@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ g.service_name }} - 티켓 삭제 [{{ domain.name }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>티켓 삭제 <small>{{ domain.name }}</small></h1>
+
+<form role="form" method="post">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{{ ticket.email }}에게 {{ ticket.name + '.' + ticket.domain.name }}를 공유하기 위한 티켓을 삭제하시겠습니까?</h3>
+        </div>
+        <div class="panel-body">
+            <button type="submit" class="btn btn-danger">삭제</button>
+            <a href="{{ url_for('domain_subdomain.subdomain_info', domain=domain.name) }}" class="btn btn-primary">취소</a>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
+

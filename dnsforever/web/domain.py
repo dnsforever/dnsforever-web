@@ -2,7 +2,8 @@ from flask import Blueprint, g, render_template, request, url_for, redirect
 
 from dnsforever.domain import ROOT_DOMAIN
 from dnsforever.web.tools.session import login, get_user, get_domain
-from dnsforever.models import Domain, DomainOwnership, NameServer
+from dnsforever.models import Domain, DomainOwnership, NameServer, \
+    SubdomainSharing
 import re
 import string
 
@@ -14,9 +15,53 @@ app = Blueprint('domain', __name__, url_prefix='/domain')
 @app.route('/')
 @login(True, '/')
 def index():
+    tickets = g.session.query(SubdomainSharing)\
+                       .filter(SubdomainSharing.email.like(get_user().email))\
+                       .all()
     ns_list = g.session.query(NameServer).all()
-    return render_template('dashboard.html', ownership_list=g.user.ownership,
-                           ns_list=ns_list)
+    return render_template('dashboard.html',
+                           ns_list=ns_list,
+                           ownership_list=g.user.ownership,
+                           subdomain_tickets=tickets)
+
+
+@app.route('/subdomain/<string:token>', methods=['GET'])
+@login(True, '/')
+def subdomain_add(token):
+    ticket = g.session.query(SubdomainSharing)\
+                      .filter(SubdomainSharing.token.like(token)).first()
+    if not ticket:
+        return redirect(url_for('domain.index'))
+
+    if ticket.email and ticket.email != get_user().email:
+        return redirect(url_for('domain.index'))
+
+    subdomain_name = '%s.%s' % (ticket.name, ticket.domain.name)
+    domain = Domain(name=subdomain_name, parent_id=ticket.domain.id)
+    ownership = DomainOwnership(master=False, user=get_user(), domain=domain)
+
+    with g.session.begin():
+        g.session.add(domain)
+        g.session.add(ownership)
+        g.session.delete(ticket)
+    return redirect(url_for('domain.index'))
+
+
+@app.route('/subdomain/<string:token>/delete', methods=['GET'])
+@login(True, '/')
+def subdomain_delete(token):
+    ticket = g.session.query(SubdomainSharing)\
+                      .filter(SubdomainSharing.token.like(token)).first()
+    if not ticket:
+        return redirect(url_for('domain.index'))
+
+    if ticket.email and ticket.email != get_user().email:
+        return redirect(url_for('domain.index'))
+
+    with g.session.begin():
+        g.session.delete(ticket)
+
+    return redirect(url_for('domain.index'))
 
 
 @app.route('/new', methods=['GET'])

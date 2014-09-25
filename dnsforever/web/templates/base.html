@@ -92,6 +92,9 @@
                 {{ nav_service ('MX 레코드', url_for('domain_mx.record_list', domain=domain.name)) }}
                 {{ nav_service ('TXT 레코드', url_for('domain_txt.record_list', domain=domain.name)) }}
                 {{ nav_service ('SOA 레코드', '#' or url_for('domain_soa.record_list', domain=domain.name)) }}
+                {% if domain.master %}
+                {{ nav_service ('서브도메인 공유', url_for('domain_subdomain.subdomain_info', domain=domain.name)) }}
+                {% endif %}
               </ul>
             </li>
 {% endif %}

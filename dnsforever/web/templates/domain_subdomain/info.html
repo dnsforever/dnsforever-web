@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ g.service_name }} - 서브 도메인 관리 [{{ domain.name }}]
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+<h1>서브 도메인 관리 <small>{{ domain.name }}</small></h1>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="30"></th>
+            <th>호스트 이름</th>
+            <th>사용자 이메일</th>
+            <th></th>
+        </tr>
+    </tbody>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td><input type="checkbox"></td>
+            <td>{{ '%s.%s' % (ticket.name, domain.name) }}</td>
+            <th>{{ ticket.email }}</th>
+            <th>
+              <a href="{{ url_for('domain_subdomain.ticket_delete', domain=domain.name, ticket_id=ticket.id) }}" class="btn btn-danger btn-xs">삭제</a>
+            </th>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="pull-right">
+    <a href="{{ url_for('domain_subdomain.ticket_new', domain=domain.name) }}" class="btn btn-primary">새로운 서브도매인 공유</a>
+    <!--button type="submit" class="btn btn-danger">Delete</button-->
+</div>
+{% endblock %}
+

@@ -44,10 +44,18 @@ def get_domain(domain, master=False):
     if not get_user():
         return None
 
-    query = g.session.query(Domain)
+    query = g.session.query(Domain, DomainOwnership)
+    query = query.join(DomainOwnership.domain)
     query = query.filter(Domain.name.like(domain))
-    query = query.filter(DomainOwnership.user == get_user())
+    query = query.filter(DomainOwnership.user_id == get_user().id)
     if master:
-        query = query.filter(DomainOwnership.master is True)
+        query = query.filter(DomainOwnership.master)
 
-    return query.first()
+    if query.count() == 0:
+        return None
+
+    domain, ownership = query.first()
+
+    domain.master = ownership.master
+
+    return domain

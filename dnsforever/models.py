@@ -90,8 +90,6 @@ class Domain(Base):
                        default=None)
     parent = relationship('Domain')
 
-    inheritable = Column(Boolean, nullable=False, default=True)
-
     @validates('domain')
     def domain_validates(self, key, domain):
         if not isinstance(domain, str):
@@ -107,6 +105,29 @@ class Domain(Base):
         self.update_serial = self.update_serial + 1
 
 
+class SubdomainSharing(Base):
+    __tablename__ = 'subdomain_sharing'
+
+    def __init__(self, domain, name, email):
+        self.domain = domain
+        self.name = name
+        self.email = email
+        self.token = random_string()
+
+    id = Column(Integer, primary_key=True)
+
+    name = Column(String(255), nullable=True)
+    domain_id = Column(Integer, ForeignKey('domain.id'), nullable=False)
+    domain = relationship(Domain)
+
+    email = Column(Unicode(100), nullable=False, index=True, unique=True)
+
+    created_at = Column(DateTime(timezone=True), nullable=False,
+                        default=functions.now())
+
+    token = Column(Unicode(127), nullable=False)
+
+
 class DomainOwnership(Base):
     __tablename__ = 'domain_ownership'
 
@@ -119,7 +140,6 @@ class DomainOwnership(Base):
     domain = relationship(Domain, backref='ownership')
 
     master = Column(Boolean, nullable=False, default=False)
-    inheritable = Column(Boolean, nullable=False, default=False)
 
 
 class NameServer(Base):

@@ -8,6 +8,20 @@
 {% endblock %}
 
 {% block body %}
+{% for ticket in subdomain_tickets %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-info">
+            <i class="fa fa-info-circle"></i>  <strong>[도메인 공유]</strong> {{ ticket.name + '.' + ticket.domain.name }}을 사용하시겠습니까?
+            <div class="pull-right">
+                <a href="{{ url_for('domain.subdomain_add', token=ticket.token) }}" class="btn btn-xs btn-success"><i class="fa fa-check"></i> 사용</a>
+                <a href="{{ url_for('domain.subdomain_delete', token=ticket.token) }}" class="btn btn-xs btn-danger"><i class="fa fa-ban"></i> 거절</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 <div class="col-xs-12 col-sm-8">
     <h1>도메인 목록</h1>
 

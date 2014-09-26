@@ -72,6 +72,27 @@ def ticket_new_process(domain):
                                domain=domain,
                                form=form)
 
+    ticket_num = g.session.query(SubdomainSharing)\
+                          .filter(SubdomainSharing.domain == domain)\
+                          .filter(SubdomainSharing.name == form.name.data)\
+                          .count()
+
+    if ticket_num:
+        form.name.errors.append('Duplicate subdomain.')
+        return render_template('domain_subdomain/new.html',
+                               domain=domain,
+                               form=form)
+
+    domain_num = g.session.query(Domain)\
+                  .filter(Domain.name == form.name.data + '.' + domain.name)\
+                  .count()
+
+    if domain_num:
+        form.name.errors.append('Duplicate subdomain.')
+        return render_template('domain_subdomain/new.html',
+                               domain=domain,
+                               form=form)
+
     try:
         ticket = SubdomainSharing(domain=domain,
                                   name=form.name.data,

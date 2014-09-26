@@ -11,7 +11,7 @@ from dnsforever.models import EmailValidation
 
 email_env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) +
                                                 '/templates'))
-email_env.globals={'g': g, 'url_for': url_for}
+email_env.globals = {'g': g, 'url_for': url_for}
 
 __all__ = ['email_validation']
 
@@ -34,19 +34,21 @@ def send_text_email(to, subject, body):
 def email_validation(user):
     if user.type != 2:
         return
-    ev = EmailValidation(user=user)
 
+    validation_email = EmailValidation(user=user)
     evs = g.session.query(EmailValidation)\
                    .filter(EmailValidation.user == user)\
                    .all()
 
     with g.session.begin():
-        g.session.add(ev)
         for ev in evs:
             g.session.delete(ev)
 
+        g.session.add(validation_email)
+
     template = email_env.get_template('email_validation.txt')
-    body = template.render(user=user, token=ev.token)
+    body = template.render(user=user,
+                           token=validation_email.token)
 
     send_text_email(to=user.email,
                     subject=u'DNS Forever: 회원 가입 확인',

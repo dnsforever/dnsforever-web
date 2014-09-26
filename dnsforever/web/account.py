@@ -4,7 +4,7 @@ from wtforms import Form, TextField, PasswordField, validators, ValidationError
 from dnsforever.models import User, EmailValidation
 from dnsforever.web.tools.session import login, set_user, get_user
 from dnsforever.web.tools import password_hash
-from dnsforever.web.email import email_validation
+from dnsforever.web import email
 
 app = Blueprint('account', __name__, url_prefix='/account')
 
@@ -41,7 +41,7 @@ def signup_process():
     with g.session.begin():
         g.session.add(user)
 
-    email_validation(user)
+    email.email_validation(user)
 
     return redirect(url_for('account.need_email_validation'))
 
@@ -73,6 +73,7 @@ def signin_process():
 
     user = g.session.query(User).filter(User.email == form.email.data).first()
     if user.type == 2:
+        email.email_validation(user)
         return redirect(url_for('account.need_email_validation'))
 
     set_user(user)
@@ -119,6 +120,11 @@ def resetpasswd():
 
 @app.route('/validation', methods=['GET'])
 def need_email_validation():
+    return render_template('need_email_validation.html')
+
+
+@app.route('/validation', methods=['POST'])
+def need_email_validation_resend():
     return render_template('need_email_validation.html')
 
 

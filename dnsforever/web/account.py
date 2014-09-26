@@ -43,8 +43,7 @@ def signup_process():
 
     email_validation(user)
 
-    # TODO: redirect to email validation
-    return redirect(url_for('index.index'))
+    return redirect(url_for('account.need_email_validation'))
 
 
 class SigninForm(Form):
@@ -74,7 +73,7 @@ def signin_process():
 
     user = g.session.query(User).filter(User.email == form.email.data).first()
     if user.type == 2:
-        return redirect(url_for('index.index'))
+        return redirect(url_for('account.need_email_validation'))
 
     set_user(user)
 
@@ -118,11 +117,16 @@ def resetpasswd():
     return redirect(url_for('index.index'))
 
 
+@app.route('/validation', methods=['GET'])
+def need_email_validation():
+    return render_template('need_email_validation.html')
+
+
 @app.route('/validation/<string:token>', methods=['GET'])
 def validation(token):
     ev = g.session.query(EmailValidation)\
-                                .filter(EmailValidation.token.like(token))\
-                                .first()
+                  .filter(EmailValidation.token.like(token))\
+                  .first()
 
     if not ev:
         return redirect(url_for('index.index'))
@@ -131,8 +135,8 @@ def validation(token):
     user.type = 1
 
     evs = g.session.query(EmailValidation)\
-                                 .filter(EmailValidation.user == user)\
-                                 .all()
+                   .filter(EmailValidation.user == user)\
+                   .all()
 
     with g.session.begin():
         g.session.add(user)

@@ -4,6 +4,6 @@
 
 {{ url_for('account.validation', token=token, _external=True) }}
 
-만약, DNS Forever에 가입하신적이 없다면 위릐 링크를 클릭하지 말고 무시하시기 바랍니다.
+만약, DNS Forever에 가입하신적이 없다면 위의 링크를 클릭하지 말고 무시하시기 바랍니다.
 
 감사합니다.

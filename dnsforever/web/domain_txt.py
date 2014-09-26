@@ -86,6 +86,7 @@ def record_new_process(domain):
 
     try:
         txt_record = RecordTXT(domain=domain,
+                               name=form.name.data or None,
                                txt=form.txt.data)
         with g.session.begin():
             txt_record.update()

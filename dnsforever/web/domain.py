@@ -137,7 +137,7 @@ def detail(domain):
     return render_template('domain_detail.html', domain=domain)
 
 
-@app.route('/<string:domain>/del', methods=['GET', 'POST'])
+@app.route('/<string:domain>/del', methods=['GET'])
 @login(True, '/')
 def domain_delete(domain):
     domain = get_domain(domain)
@@ -145,10 +145,39 @@ def domain_delete(domain):
     if not domain:
         return redirect(url_for('domain.index'))
 
-    if request.method == 'POST':
-        # TODO: Delete action need to solve ownership problem.
-        # with g.session.begin():
-        #     g.session.delete(domain)
+    return render_template('domain_del.html', domain=domain)
+
+
+@app.route('/<string:domain>/del', methods=['POST'])
+@login(True, '/')
+def domain_delete_process(domain):
+    domain = get_domain(domain)
+
+    if not domain:
         return redirect(url_for('domain.index'))
 
-    return render_template('domain_del.html', domain=domain)
+    ownership = g.session.query(DomainOwnership)\
+                         .filter(DomainOwnership.user == get_user())\
+                         .filter(DomainOwnership.domain == domain).first()
+
+    errors = []
+    if domain.records:
+        errors.append('records')
+
+    if ownership.master:
+        subdomain_num = g.session.query(Domain)\
+                                 .filter(Domain.parent.contains(domain)).count()
+        subdomain_sharing = g.session.query(SubdomainSharing)\
+                                     .filter(SubdomainSharing.domain == domain)\
+                                     .count()
+        if subdomain_num != 0 or subdomain_sharing != 0:
+            errors.append('subdomains')
+
+    if errors:
+        return render_template('domain_del.html', domain=domain, errors=errors)
+
+    with g.session.begin():
+        g.session.delete(ownership)
+        g.session.delete(domain)
+
+    return redirect(url_for('domain.index'))

@@ -10,6 +10,27 @@
 {% block body %}
 <h1>도메인 삭제 <small>{{ domain.name }}</small></h1>
 
+{% if 'records' in errors %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-info-circle"></i> 레코드가 있는 도메인은 삭제 하실 수 없습니다. 모두 삭제하신 후 도메인을 지워주세요.
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if 'subdomains' in errors %}
+<div class="row">
+    <div class="col-lg-12">
+        <div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <i class="fa fa-info-circle"></i>  서브도메인이 있는 도메인은 삭제 하실 수 없습니다.
+        </div>
+    </div>
+</div>
+{% endif %}
+
 <form role="form" method="post">
     <div class="panel panel-default">
         <div class="panel-heading">

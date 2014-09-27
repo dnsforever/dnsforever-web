@@ -146,16 +146,17 @@
     </p>
     <p>
         <a href="{{ url_for('domain_cname.record_new', domain=domain.name) }}" class="btn btn-lg btn-info">CNAME 레코드</a>
-        <a href="{{ '#' or url_for('domain_webforwarding.record_new', domain=domain.name) }}" class="btn btn-lg btn-info">Web Forwarding</a>
-        <a href="{{ '#' or url_for('domain_webparking.record_new', domain=domain.name) }}" class="btn btn-lg btn-info">Web Parking</a>
+	<!-- <a href="{{ '#' or url_for('domain_webforwarding.record_new', domain=domain.name) }}" class="btn btn-lg btn-info">Web Forwarding</a>->
+	<!-- <a href="{{ '#' or url_for('domain_webparking.record_new', domain=domain.name) }}" class="btn btn-lg btn-info">Web Parking</a>-->
     </p>
     <p>
         <a href="{{ url_for('domain_mx.record_new', domain=domain.name) }}" class="btn btn-lg btn-warning">MX 레코드</a>
     </p>
     <p>
         <a href="{{ url_for('domain_txt.record_new', domain=domain.name) }}" class="btn btn-lg btn-danger">TXT 레코드</a>
-        <a href="{{ '#' or url_for('domain_soa.record_new', domain=domain.name) }}" class="btn btn-lg btn-danger">SOA레코드</a>
+	<!--<a href="{{ '#' or url_for('domain_soa.record_new', domain=domain.name) }}" class="btn btn-lg btn-danger">SOA레코드</a>-->
         <a href="{{ '#' or url_for('domain_ns.record_new', domain=domain.name) }}" class="btn btn-lg btn-danger">NS레코드</a>
+	{% if domain.master %}<a href="{{ url_for('domain_subdomain.subdomain_info', domain=domain.name) }}" class="btn btn-lg btn-danger">서브도메인 공유</a>{% endif %}
     </p>
 </div>
 

@@ -335,11 +335,11 @@ class RecordTXT(Record):
 
     @property
     def txt(self):
-        return self.rdata[1:-1]
+        return self.rdata
 
     @txt.setter
     def txt(self, value):
-        self.rdata = '"%s"' % value
+        self.rdata = value
 
 
 class RecordNS(Record):

@@ -33,7 +33,7 @@ def record_list(domain):
 class RecordTXTForm(Form):
     name = StringField('name',
                        [Regexp('(^$)|(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
-    txt = StringField('txt', [Length(max=255), Regexp('^[^\\"]+$')])
+    txt = StringField('txt', [Length(max=255)])
 
     def validate_txt(form, field):
         try:

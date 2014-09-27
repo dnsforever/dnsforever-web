@@ -1,6 +1,8 @@
+import re
+
 from flask import Blueprint, g, render_template, request, url_for, redirect
 from wtforms import Form, StringField
-from wtforms.validators import Regexp, Length
+from wtforms.validators import Regexp, Length, ValidationError
 from dnsforever.web.tools.session import login, get_user, get_domain
 from dnsforever.models import Domain, RecordTXT
 
@@ -30,9 +32,14 @@ def record_list(domain):
 
 class RecordTXTForm(Form):
     name = StringField('name',
-                     [Regexp('(^$)|(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
-    txt = StringField('txt', [Length(max=255),
-                            Regexp('^[a-z0-9\-_\.]+=[a-zA-Z0-9\-_=\.]+$')])
+                       [Regexp('(^$)|(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
+    txt = StringField('txt', [Length(max=255), Regexp('^[^\\"]+$')])
+
+    def validate_txt(form, field):
+        try:
+            field.data.encode('ascii')
+        except:
+            raise ValidationError('You can use only ASCII code.')
 
 
 @app.route('/new', methods=['GET'])

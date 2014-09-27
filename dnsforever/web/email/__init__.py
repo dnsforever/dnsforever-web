@@ -3,6 +3,7 @@
 import os
 import smtplib
 from email.mime.text import MIMEText
+from email.header import Header
 
 from flask import g, url_for
 from jinja2 import Environment, FileSystemLoader
@@ -17,12 +18,8 @@ __all__ = ['email_validation']
 
 
 def send_text_email(to, subject, body):
-    if g.debug:
-        print body
-        return
-
-    msg = MIMEText(body)
-    msg['Subject'] = subject
+    msg = MIMEText(body, 'plain', 'utf-8')
+    msg['Subject'] = Header(subject, 'utf-8')
     msg['From'] = 'noreply@dnsforever.kr'
     msg['To'] = to
 

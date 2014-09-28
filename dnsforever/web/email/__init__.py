@@ -9,6 +9,7 @@ from flask import g, url_for
 from jinja2 import Environment, FileSystemLoader
 
 from dnsforever.models import EmailValidation
+from dnsforever.config import smtp_host, smtp_port, smtp_account
 
 email_env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) +
                                                 '/templates'))
@@ -23,7 +24,9 @@ def send_text_email(to, subject, body):
     msg['From'] = 'noreply@dnsforever.kr'
     msg['To'] = to
 
-    s = smtplib.SMTP('localhost')
+    s = smtplib.SMTP(smtp_host, smtp_port)
+    if smtp_account:
+        s.login(*smtp_account)
     s.sendmail('noreply@dnsforever.kr', [to], msg.as_string())
     s.quit()
 

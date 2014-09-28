@@ -30,9 +30,9 @@ def record_list(domain):
 
 
 class RecordCNAMEForm(Form):
-    name = TextField('name', [Regexp('(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
+    name = TextField('name', [Regexp('(^([a-z0-9\-_]+\.)*([a-z0-9\-_]+)$)')])
     # TODO: Check max length of name.
-    target = TextField('target', [Regexp('(^([a-z0-9\-]+\.)*([a-z0-9\-]+)$)')])
+    target = TextField('target', [Regexp('(^([a-z0-9\-_]+\.)*([a-z0-9\-_]+)$)')])
     memo = TextField('memo', [Length(max=1000)])
 
 

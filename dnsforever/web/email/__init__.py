@@ -8,7 +8,7 @@ from email.header import Header
 from flask import g, url_for
 from jinja2 import Environment, FileSystemLoader
 
-from dnsforever.models import EmailValidation
+from dnsforever.models import EmailValidation, FindPasswd
 from dnsforever.config import smtp_ssl, smtp_host, smtp_port, smtp_account
 
 email_env = Environment(loader=FileSystemLoader(os.path.dirname(__file__) +
@@ -55,5 +55,25 @@ def email_validation(user):
                            token=validation_email.token)
 
     send_text_email(to=user.email,
-                    subject=u'DNS Forever: 회원 가입 확인',
+                    subject=u'DNS Forever: 회원 가입확인',
+                    body=body)
+
+
+def find_passwd(user):
+    findpasswd_info = FindPasswd(user=user)
+    findpasswd_list = g.session.query(FindPasswd)\
+                               .filter(FindPasswd.user == user)\
+                               .all()
+
+    with g.session.begin():
+        for fp in findpasswd_list:
+            g.session.delete(fp)
+
+        g.session.add(findpasswd_info)
+
+    template = email_env.get_template('find_passwd.txt')
+    body = template.render(token=findpasswd_info.token)
+
+    send_text_email(to=user.email,
+                    subject=u'DNS Forever: 비밀번호 초기화',
                     body=body)

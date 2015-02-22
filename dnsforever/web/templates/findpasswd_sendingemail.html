@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ g.service_name }}
+{% endblock %}
+
+{% block head %}
+{% endblock %}
+
+{% block body %}
+      <div class="row row-offcanvas row-offcanvas-right">
+        <div class="col-xs-12 col-sm-12">
+          <div class="jumbotron">
+            <h2>비밀번호 초기화 메일을 발송했습니다.</h2>
+            <hr>
+            <p>메일이 전달되기까지 수 분에서 수 십분 정도시간이 필요할 수도 있습니다. 충분한 시간이 지나도 메일이 도착하지 않는다면 다시 시도해 주시기 바랍니다.</p>
+          </div>
+        </div>
+      </div><!--/row-->
+
+{% endblock %}

@@ -1,0 +1,5 @@
+비밀번호 재설정을 하시려면 다음 링크를 클릭해 주시기 바랍니다.
+
+{{ url_for('account.findpasswd_resetpasswd', token=token, _external=True) }}
+
+감사합니다.

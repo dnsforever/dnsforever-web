@@ -73,6 +73,24 @@ class EmailValidation(Base):
     token = Column(Unicode(127), nullable=False)
 
 
+class FindPasswd(Base):
+    __tablename__ = 'findpasswd'
+
+    def __init__(self, user):
+        self.user = user
+        self.token = random_string()
+
+    id = Column(Integer, primary_key=True)
+
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship(User)
+
+    created_at = Column(DateTime(timezone=True), nullable=False,
+                        default=functions.now())
+
+    token = Column(Unicode(127), nullable=False)
+
+
 class Domain(Base):
     __tablename__ = 'domain'
 

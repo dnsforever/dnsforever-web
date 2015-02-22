@@ -17,22 +17,22 @@
 {%- endmacro %}
 
 {% block title %}
-{{ g.service_name }} - 로그인
+{{ g.service_name }} - 비밀번호 찾기
 {% endblock %}
 
 {% block head %}
 {% endblock %}
 
 {% block body %}
-<h1>로그인</h1>
+<h1>비밀번호 찾기</h1>
+
+<p>가입하신 이메일 주소를 입력해 주시면, 비밀번호를 초기화 할 수 있는 링크를 보내드립니다.</p>
 
 <form class="form-horizontal" role="form" method="post">
   {{ form_field(form.email, 'inputEmail', '이메일', placeholder='이메일', type='email') }}
-  {{ form_field(form.password, 'inputPassword', '비밀번호', placeholder='비밀번호', type='password') }}
   <div class="form-group">
     <div class="col-sm-offset-2 col-sm-10">
-      <button type="submit" class="btn btn-default">로그인</button>
-      <a href="{{ url_for('account.findpasswd_form') }}">비밀번호 찾기</a>
+      <button type="submit" class="btn btn-default">이메일 발송</button>
     </div>
   </div>
 </form>

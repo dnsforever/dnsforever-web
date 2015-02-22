@@ -1,7 +1,7 @@
 from flask import Blueprint, g, render_template, redirect, url_for, request
 from wtforms import Form, TextField, PasswordField, validators, ValidationError
 
-from dnsforever.models import User, EmailValidation
+from dnsforever.models import User, EmailValidation, FindPasswd
 from dnsforever.web.tools.session import login, set_user, get_user
 from dnsforever.web.tools import password_hash
 from dnsforever.web import email
@@ -150,4 +150,69 @@ def validation(token):
             g.session.delete(ev)
 
     set_user(user)
+    return redirect(url_for('index.index'))
+
+
+class FindPasswdForm(Form):
+    email = TextField('email', [validators.Length(min=6, max=127),
+                                validators.Email()])
+
+
+@app.route('/findpasswd', methods=['GET'])
+def findpasswd_form():
+    return render_template('findpasswd.html', form=FindPasswdForm())
+
+
+@app.route('/findpasswd', methods=['POST'])
+def findpasswd_process():
+    form = FindPasswdForm(request.form)
+
+    if not form.validate():
+        return render_template('findpasswd.html', form=form)
+
+    user = g.session.query(User).filter(User.email == form.email.data).first()
+
+    if user:
+        email.find_passwd(user)
+
+    return render_template('findpasswd_sendingemail.html')
+
+
+class FindPasswdResetPWForm(Form):
+    new_password = PasswordField('new_password', [validators.Required()])
+
+
+@app.route('/findpasswd/<string:token>', methods=['GET'])
+def findpasswd_resetpasswd(token):
+    fp = g.session.query(FindPasswd)\
+                  .filter(FindPasswd.token == token)\
+                  .first()
+    if not fp:
+        return render_template('findpasswd_wrongtoken.html')
+
+    return render_template('findpasswd_resetpasswd.html',
+                           form=FindPasswdResetPWForm())
+
+
+@app.route('/findpasswd/<string:token>', methods=['POST'])
+def findpasswd_resetpasswd_process(token):
+    fp = g.session.query(FindPasswd)\
+                  .filter(FindPasswd.token == token)\
+                  .first()
+    if not fp:
+        return render_template('findpasswd_wrongtoken.html')
+
+    form = FindPasswdResetPWForm(request.form)
+
+    if not form.validate():
+        return render_template('findpasswd_resetpasswd.html', form=form)
+
+    with g.session.begin():
+        user = fp.user
+        user.password = password_hash(form.new_password.data)
+        g.session.add(user)
+        g.session.delete(fp)
+
+    set_user(user)
+
     return redirect(url_for('index.index'))
